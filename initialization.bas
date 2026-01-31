@@ -2,95 +2,95 @@ Attribute VB_Name = "initialization"
 Option Explicit
 
 '------------------------------------------------------------------------------
-'¡ƒGƒfƒBƒ^[İ’è
-'ƒtƒHƒ“ƒg–¼:ƒƒCƒŠƒIi“ú–{Œêj
-'ƒTƒCƒYF9
-'ƒCƒ“ƒWƒP[ƒ^[ƒo[FON
-'•W€ƒR[ƒh     @F‘OŒi(”’)@E”wŒi(•)
-'‘I‘ğ‚³‚ê‚½•¶š  F‘OŒi(©“®)E”wŒi(Â)
-'\•¶ƒGƒ‰[•¶š  F‘OŒi(Ô)@E”wŒi(”’)
-'ŸƒXƒe[ƒgƒƒ“ƒgF‘OŒi(©“®)E”wŒi(‰©F)
-'ƒuƒŒ[ƒNƒ|ƒCƒ“ƒgF‘OŒi(”’)@E”wŒi(’ƒF)
-'ƒRƒƒ“ƒg@@@@F‘OŒi(‰©—Î)E”wŒi(•)
-'ƒL[ƒ[ƒh@@@F‘OŒi(…F)E”wŒi(•)
-'¯•Êq@@@@@F‘OŒi(‰©F)E”wŒi(•)
-'ƒuƒbƒNƒ}[ƒN@@F‘OŒi(ƒsƒ“ƒN)E”wŒi(•)EƒCƒ“ƒWƒP[ƒ^(ƒsƒ“ƒN)
-'ŒÄ‚Ño‚µŒ³@@@F‘OŒi(Ô)E”wŒi(•)EƒCƒ“ƒWƒP[ƒ^(Ô)
+'â– ã‚¨ãƒ‡ã‚£ã‚¿ãƒ¼è¨­å®š
+'ãƒ•ã‚©ãƒ³ãƒˆå:ãƒ¡ã‚¤ãƒªã‚ªï¼ˆæ—¥æœ¬èªï¼‰
+'ã‚µã‚¤ã‚ºï¼š9
+'ã‚¤ãƒ³ã‚¸ã‚±ãƒ¼ã‚¿ãƒ¼ãƒãƒ¼ï¼šON
+'æ¨™æº–ã‚³ãƒ¼ãƒ‰     ã€€ï¼šå‰æ™¯(ç™½)ã€€ãƒ»èƒŒæ™¯(é»’)
+'é¸æŠã•ã‚ŒãŸæ–‡å­—  ï¼šå‰æ™¯(è‡ªå‹•)ãƒ»èƒŒæ™¯(é’)
+'æ§‹æ–‡ã‚¨ãƒ©ãƒ¼æ–‡å­—  ï¼šå‰æ™¯(èµ¤)ã€€ãƒ»èƒŒæ™¯(ç™½)
+'æ¬¡ã‚¹ãƒ†ãƒ¼ãƒˆãƒ¡ãƒ³ãƒˆï¼šå‰æ™¯(è‡ªå‹•)ãƒ»èƒŒæ™¯(é»„è‰²)
+'ãƒ–ãƒ¬ãƒ¼ã‚¯ãƒã‚¤ãƒ³ãƒˆï¼šå‰æ™¯(ç™½)ã€€ãƒ»èƒŒæ™¯(èŒ¶è‰²)
+'ã‚³ãƒ¡ãƒ³ãƒˆã€€ã€€ã€€ã€€ï¼šå‰æ™¯(é»„ç·‘)ãƒ»èƒŒæ™¯(é»’)
+'ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰ã€€ã€€ã€€ï¼šå‰æ™¯(æ°´è‰²)ãƒ»èƒŒæ™¯(é»’)
+'è­˜åˆ¥å­ã€€ã€€ã€€ã€€ã€€ï¼šå‰æ™¯(é»„è‰²)ãƒ»èƒŒæ™¯(é»’)
+'ãƒ–ãƒƒã‚¯ãƒãƒ¼ã‚¯ã€€ã€€ï¼šå‰æ™¯(ãƒ”ãƒ³ã‚¯)ãƒ»èƒŒæ™¯(é»’)ãƒ»ã‚¤ãƒ³ã‚¸ã‚±ãƒ¼ã‚¿(ãƒ”ãƒ³ã‚¯)
+'å‘¼ã³å‡ºã—å…ƒã€€ã€€ã€€ï¼šå‰æ™¯(èµ¤)ãƒ»èƒŒæ™¯(é»’)ãƒ»ã‚¤ãƒ³ã‚¸ã‚±ãƒ¼ã‚¿(èµ¤)
 
 
 Public Declare PtrSafe Function QueryPerformanceCounter Lib "kernel32" (ByRef lpPerformanceCount As LongLong) As Long
 Public Declare PtrSafe Function QueryPerformanceFrequency Lib "kernel32" (ByRef lpFrequency As LongLong) As Long
 
-'1)Šî–{E§ŒäŒn
-Public i, j, k        As LongLong      'ƒ‹[ƒvˆ—
-Public idx           As String           'õˆøyindexz
-Public cnt           As LongLong      'ƒJƒEƒ“ƒgycountz
-Public ret           As Variant          '–ß‚è’lyreturn valuez
-Public res           As Variant          'Œ‹‰Êyresultz
-Public flag          As Boolean         'ƒtƒ‰ƒOyflagz
-Public isOK         As Boolean         'OKŒ‹‰Ê
-Public hasError    As Boolean         'ƒGƒ‰[”­¶
-Public fileExists    As Boolean         '‘¶İƒ`ƒFƒbƒN
+'1)åŸºæœ¬ãƒ»åˆ¶å¾¡ç³»
+Public i, j, k        As LongLong      'ãƒ«ãƒ¼ãƒ—å‡¦ç†
+Public idx           As String           'ç´¢å¼•ã€indexã€‘
+Public cnt           As LongLong      'ã‚«ã‚¦ãƒ³ãƒˆã€countã€‘
+Public ret           As Variant          'æˆ»ã‚Šå€¤ã€return valueã€‘
+Public res           As Variant          'çµæœã€resultã€‘
+Public flag          As Boolean         'ãƒ•ãƒ©ã‚°ã€flagã€‘
+Public isOK         As Boolean         'OKçµæœ
+Public hasError    ã€€As Boolean         'ã‚¨ãƒ©ãƒ¼ç™ºç”Ÿ
+Public fileExists    As Boolean         'å­˜åœ¨ãƒã‚§ãƒƒã‚¯
 
-'2)ƒIƒuƒWƒFƒNƒg
-Public fso          As Object           'ƒIƒuƒWƒFƒNƒg
-Public obj          As Object           'ƒIƒuƒWƒFƒNƒg
-Public dict          As Object           'DictionaryƒIƒuƒWƒFƒNƒg
-Public re            As Object           'RegExpƒIƒuƒWƒFƒNƒg
-Public wb           As Workbook      'ƒuƒbƒN
-Public ws           As Worksheet      'ƒV[ƒg
-Public rng           As Range           'ƒZƒ‹
-Public tbl            As ListObject      'ƒe[ƒuƒ‹‘€ì
+'2)ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+Public fso          As Object           'ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+Public obj          As Object           'ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+Public dict          As Object           'Dictionaryã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+Public re            As Object           'RegExpã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+Public wb           As Workbook      'ãƒ–ãƒƒã‚¯
+Public ws           As Worksheet      'ã‚·ãƒ¼ãƒˆ
+Public rng           As Range           'ã‚»ãƒ«
+Public tbl            As ListObject      'ãƒ†ãƒ¼ãƒ–ãƒ«æ“ä½œ
 
-'3)ƒf[ƒ^Œn
-Public arr           As Variant          '”z—ñyarrayz
-Public colArr       As Variant          '”z—ñyarrayz
-Public result()     As Variant          '”z—ñyarrayz
-Public co           As Collection       '€–Ú(item)‚ÆƒL[(key)‚ğƒZƒbƒg‚ÅŠi”[‚·‚éƒIƒuƒWƒFƒNƒg
-Public list           As Variant          'ƒŠƒXƒgƒ{ƒbƒNƒXyListBoxz
-Public data         As Variant          '”Ä—pƒf[ƒ^
-Public rowData   As Variant          'sƒf[ƒ^
-Public colData    As Variant            '—ñƒf[ƒ^
+'3)ãƒ‡ãƒ¼ã‚¿ç³»
+Public arr           As Variant          'é…åˆ—ã€arrayã€‘
+Public colArr       ã€€As Variant          'é…åˆ—ã€arrayã€‘
+Public result()    ã€€ As Variant          'é…åˆ—ã€arrayã€‘
+Public co           ã€€As Collection       'é …ç›®(item)ã¨ã‚­ãƒ¼(key)ã‚’ã‚»ãƒƒãƒˆã§æ ¼ç´ã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+Public list           As Variant          'ãƒªã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ã€ListBoxã€‘
+Public data         ã€€As Variant          'æ±ç”¨ãƒ‡ãƒ¼ã‚¿
+Public rowData   ã€€ã€€ã€€As Variant          'è¡Œãƒ‡ãƒ¼ã‚¿
+Public colData    ã€€ã€€As Variant            'åˆ—ãƒ‡ãƒ¼ã‚¿
 
-'4)”’lEˆÊ’u
-Public row               As LongLong       's
-Public startRow        As LongLong       'ŠJns
-Public endRow         As LongLong       'ÅIs
-Public col                 As LongLong       '—ñ
-Public startCol          As LongLong       'ŠJn—ñ
-Public endCol           As LongLong       'ÅI—ñ
-Public pos                As Variant          'ˆÊ’uypositionz
+'4)æ•°å€¤ãƒ»ä½ç½®
+Public row               As LongLong       'è¡Œ
+Public startRow        As LongLong       'é–‹å§‹è¡Œ
+Public endRow         As LongLong       'æœ€çµ‚è¡Œ
+Public col                 As LongLong       'åˆ—
+Public startCol          As LongLong       'é–‹å§‹åˆ—
+Public endCol           As LongLong       'æœ€çµ‚åˆ—
+Public pos                As Variant          'ä½ç½®ã€positionã€‘
 
-'5)•¶š—ñEƒtƒ@ƒCƒ‹
-Public str                 As String             '•¶š—ñ
-Public path              As String             'ƒtƒ@ƒCƒ‹ƒpƒX
-Public fileName        As String             'ƒtƒ@ƒCƒ‹–¼
-Public folderPath      As String             'ƒtƒHƒ‹ƒ_ƒpƒX
-Public ext                As String             'Šg’£q
+'5)æ–‡å­—åˆ—ãƒ»ãƒ•ã‚¡ã‚¤ãƒ«
+Public str                 As String             'æ–‡å­—åˆ—
+Public path              As String             'ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹
+Public fileName        As String             'ãƒ•ã‚¡ã‚¤ãƒ«å
+Public folderPath      As String             'ãƒ•ã‚©ãƒ«ãƒ€ãƒ‘ã‚¹
+Public ext                As String             'æ‹¡å¼µå­
 
-'6)“ú•tEŠÔ
-Public dt                 As Date               '“ú•t
-Public nowDt           As Date               '¡‚Ì“ú
-Public startDt           As Date              'ŠJn“ú
-Public endDt            As Date               'I—¹“ú
-Public elapsed          As Date               'Œo‰ß“ú
+'6)æ—¥ä»˜ãƒ»æ™‚é–“
+Public dt                 As Date               'æ—¥ä»˜
+Public nowDt           As Date               'ä»Šã®æ—¥æ™‚
+Public startDt           As Date              'é–‹å§‹æ—¥æ™‚
+Public endDt            As Date               'çµ‚äº†æ—¥æ™‚
+Public elapsed          As Date               'çµŒéæ—¥æ™‚
 
-'7)ˆ—ƒtƒ[
-Public src                As Variant            'ƒRƒs[Œ³ysourcez
-Public dst                As Variant            'ƒRƒs[æydestinationz
-Public inputVal         As Variant            '“ü—Í’l
-Public outputVal       As Variant            'o—Í’l
-Public tmp               As Variant            'ˆê•Ï”
-Public buf                As Variant            'ƒoƒbƒtƒ@ybufferz
+'7)å‡¦ç†ãƒ•ãƒ­ãƒ¼
+Public src                As Variant            'ã‚³ãƒ”ãƒ¼å…ƒã€sourceã€‘
+Public dst                As Variant            'ã‚³ãƒ”ãƒ¼å…ˆã€destinationã€‘
+Public inputVal         As Variant            'å…¥åŠ›å€¤
+Public outputVal       As Variant            'å‡ºåŠ›å€¤
+Public tmp               As Variant            'ä¸€æ™‚å¤‰æ•°
+Public buf                As Variant            'ãƒãƒƒãƒ•ã‚¡ã€bufferã€‘
 
-'8)ƒGƒ‰[EƒƒO
-Public errNum          As Variant            'ƒGƒ‰[–¼
-Public errMsg           As Variant            'ƒGƒ‰[ƒƒbƒZ[ƒW
-Public log                As Variant            'ƒƒO
-Public status           As Variant             'ó‹µFƒXƒe[ƒ^ƒX
+'8)ã‚¨ãƒ©ãƒ¼ãƒ»ãƒ­ã‚°
+Public errNum          As Variant            'ã‚¨ãƒ©ãƒ¼å
+Public errMsg           As Variant            'ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
+Public log                As Variant            'ãƒ­ã‚°
+Public status           As Variant             'çŠ¶æ³ï¼šã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
 
 '------------------------------------------------------------------------------
-'¡QÆİ’è
+'â– å‚ç…§è¨­å®š
 'Microsoft Scripting Runtime
 'Microsoft VBScript Regular Expressions X.X
 '------------------------------------------------------------------------------
@@ -111,55 +111,55 @@ Sub library()
 path = "\\////"
 Set fso = CreateObject("Scripting.FileSystemObject")
 If fso.fileExists(path) Then
-    Debug.Print "‘¶İ‚µ‚Ü‚·B"
+    Debug.Print "å­˜åœ¨ã—ã¾ã™ã€‚"
 End If
 
 Set fso = Nothing
 
 
 '------------------------------------------------------------------------------
-'¡ƒc[ƒ‹”z•zƒŠƒXƒN
-'EQÆİ’è‚ÅŒ‡—/ƒo[ƒWƒ‡ƒ“·
-'E32/64bit·
-'EOfficeƒo[ƒWƒ‡ƒ“·
-'E—˜—p‹Ö~‚ÌCOMiƒZƒLƒ…ƒŠƒeƒBƒ|ƒŠƒV[j
+'â– ãƒ„ãƒ¼ãƒ«é…å¸ƒãƒªã‚¹ã‚¯
+'ãƒ»å‚ç…§è¨­å®šã§æ¬ è½/ãƒãƒ¼ã‚¸ãƒ§ãƒ³å·®
+'ãƒ»32/64bitå·®
+'ãƒ»Officeãƒãƒ¼ã‚¸ãƒ§ãƒ³å·®
+'ãƒ»åˆ©ç”¨ç¦æ­¢ã®COMï¼ˆã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£ãƒãƒªã‚·ãƒ¼ï¼‰
 
-'‘ÎôAFQÆİ’è•s—v‚Ì”ÍˆÍ‚ÅŠ®Œ‹‚³‚¹‚é
-'EExcel•W€‹@”\i”z—ñEDictionary‚È‚µ‚Å‚à‘‚¯‚é”ÍˆÍj
-'EWorksheetFunctionACollection “™
+'å¯¾ç­–Aï¼šå‚ç…§è¨­å®šä¸è¦ã®ç¯„å›²ã§å®Œçµã•ã›ã‚‹
+'ãƒ»Excelæ¨™æº–æ©Ÿèƒ½ï¼ˆé…åˆ—ãƒ»Dictionaryãªã—ã§ã‚‚æ›¸ã‘ã‚‹ç¯„å›²ï¼‰
+'ãƒ»WorksheetFunctionã€Collection ç­‰
 
-'‘ÎôBFCreateObjecti’x‰„ƒoƒCƒ“ƒfƒBƒ“ƒOj‚Å‹zû‚·‚é
+'å¯¾ç­–Bï¼šCreateObjectï¼ˆé…å»¶ãƒã‚¤ãƒ³ãƒ‡ã‚£ãƒ³ã‚°ï¼‰ã§å¸åã™ã‚‹
 'Dictionary(Scripting)
 Set dict = CreateObject("Scripting.Dictionary")
 
-'‚‘¬‚ÈuƒL[¨’lvŒŸõ—p‚Ìƒf[ƒ^\‘¢
-'u‚±‚Ì’lA‚à‚¤o‚Ä‚«‚½Hv
-'uID‚©‚ç–¼‘Oˆø‚«‚½‚¢v
-'ud•¡ƒ`ƒFƒbƒN‚µ‚½‚¢v
-'Ed•¡íœ
-'Eƒ}ƒXƒ^QÆ
-'EWŒv
-'EƒOƒ‹[ƒsƒ“ƒO
-'Eƒtƒ‰ƒOŠÇ—
+'é«˜é€Ÿãªã€Œã‚­ãƒ¼â†’å€¤ã€æ¤œç´¢ç”¨ã®ãƒ‡ãƒ¼ã‚¿æ§‹é€ 
+'ã€Œã“ã®å€¤ã€ã‚‚ã†å‡ºã¦ããŸï¼Ÿã€
+'ã€ŒIDã‹ã‚‰åå‰å¼•ããŸã„ã€
+'ã€Œé‡è¤‡ãƒã‚§ãƒƒã‚¯ã—ãŸã„ã€
+'ãƒ»é‡è¤‡å‰Šé™¤
+'ãƒ»ãƒã‚¹ã‚¿å‚ç…§
+'ãƒ»é›†è¨ˆ
+'ãƒ»ã‚°ãƒ«ãƒ¼ãƒ”ãƒ³ã‚°
+'ãƒ»ãƒ•ãƒ©ã‚°ç®¡ç†
 
-dict("A001") = "R“c"
-dict("A002") = "²“¡"
+dict("A001") = "å±±ç”°"
+dict("A002") = "ä½è—¤"
 If dict.Exists("A001") Then
     Debug.Print dict("A001")
 End If
 
-'Dictionary‚Í **0(1)ƒAƒNƒZƒXi‚Ù‚Ú’è”ŠÔj**‚Ì‚½‚ß
-'‘å—Êƒf[ƒ^‚É‚È‚é‚Æ‘ÌŠ´‘¬“x‚ª•ÊŸŒ³
+'Dictionaryã¯ **0(1)ã‚¢ã‚¯ã‚»ã‚¹ï¼ˆã»ã¼å®šæ•°æ™‚é–“ï¼‰**ã®ãŸã‚
+'å¤§é‡ãƒ‡ãƒ¼ã‚¿ã«ãªã‚‹ã¨ä½“æ„Ÿé€Ÿåº¦ãŒåˆ¥æ¬¡å…ƒ
 
 
 'RegExp(VBScript)
 Set re = CreateObject("VBScript.RegExp")
 
-'³‹K•\Œ»iƒpƒ^[ƒ“ƒ}ƒbƒ`j
-'Eu‚±‚Ì•¶š—ñAƒ[ƒ‹Œ`®Hv
-'Eu”š‚¾‚¯”²‚«‚½‚¢v
-'Eu“Á’èƒtƒH[ƒ}ƒbƒg‚¾‚¯’Šov
-'10s‚Å100s•ª‚Ì•¶š—ñˆ—‚ğÁ‚¹‚éŒn‚Ì“¹‹ï
+'æ­£è¦è¡¨ç¾ï¼ˆãƒ‘ã‚¿ãƒ¼ãƒ³ãƒãƒƒãƒï¼‰
+'ãƒ»ã€Œã“ã®æ–‡å­—åˆ—ã€ãƒ¡ãƒ¼ãƒ«å½¢å¼ï¼Ÿã€
+'ãƒ»ã€Œæ•°å­—ã ã‘æŠœããŸã„ã€
+'ãƒ»ã€Œç‰¹å®šãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã ã‘æŠ½å‡ºã€
+'10è¡Œã§100è¡Œåˆ†ã®æ–‡å­—åˆ—å‡¦ç†ã‚’æ¶ˆã›ã‚‹ç³»ã®é“å…·
 
 re.pattern = "/d+"
 re.Global = True
@@ -169,7 +169,7 @@ If re.test("ID=12345") Then
 End If
 
 '------------------------------------------------------------------------------
-'¡ƒIƒuƒWƒFƒNƒgİ’è
+'â– ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆè¨­å®š
 Set wb = ThisWorkbook
 Set ws = ThisWorkbook.ActiveSheet
 
@@ -178,17 +178,17 @@ Set wb = Nothing
 
 
 '------------------------------------------------------------------------------
-'¡‹ó‚Ì”»’è
-'Null       :  DB—R—ˆ‚ÌŒ‡‘¹’l@        F@If IsNull(x) Then
-'Empty    :  –¢‰Šú‰»‚ÌVariant@    F@If IsEmpty(x) Then
-'Nothing  :  ƒIƒuƒWƒFƒNƒg‚Ì–¢¶¬@F@If x Is Nothing Then
-'ƒuƒ‰ƒ“ƒN  :  ""(‹ó•¶š)@@@@@@F@If x = "" Then
+'â– ç©ºã®åˆ¤å®š
+'Null       :  DBç”±æ¥ã®æ¬ æå€¤ã€€        ï¼šã€€If IsNull(x) Then
+'Empty    :  æœªåˆæœŸåŒ–ã®Variantã€€    ï¼šã€€If IsEmpty(x) Then
+'Nothing  :  ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æœªç”Ÿæˆã€€ï¼šã€€If x Is Nothing Then
+'ãƒ–ãƒ©ãƒ³ã‚¯  :  ""(ç©ºæ–‡å­—)ã€€ã€€ã€€ã€€ã€€ã€€ï¼šã€€If x = "" Then
 
-'Variant‚ªu‰½‚à“ü‚Á‚Ä‚È‚¢‚©Hv
+'VariantãŒã€Œä½•ã‚‚å…¥ã£ã¦ãªã„ã‹ï¼Ÿã€
 If IsNull(tmp) Or IsEmpty(tmp) Or tmp = "" Then
 End If
 
-'RangeƒZƒ‹—p
+'Rangeã‚»ãƒ«ç”¨
 If IsNull(rng.Value) Or rng.Value = "" Then
 End If
 
@@ -196,25 +196,25 @@ If obj Is Nothing Then
 End If
 
 '------------------------------------------------------------------------------
-'¡’lƒ`ƒFƒbƒN
+'â– å€¤ãƒã‚§ãƒƒã‚¯
 tmp = rng.Value
 
 If IsError(tmp) Then
-    'ƒGƒ‰[
+    'ã‚¨ãƒ©ãƒ¼
 ElseIf IsEmpty(tmp) Or tmp = "" Then
-    '‹ó
+    'ç©º
 ElseIf IsDate(tmp) Then
-    '“ú•t
+    'æ—¥ä»˜
 ElseIf IsNumeric(tmp) Then
-    '”’l
+    'æ•°å€¤
 ElseIf VarType(tmp) = vbString Then
-    '•¶š—ñ
+    'æ–‡å­—åˆ—
 End If
 
 
 '------------------------------------------------------------------------------
-'¡•¶š—ñ‘€ì
-'ŠÖ”–¼‚ÌŒã‚ë‚Éuv‚ğ•t‚¯‚é‚ÆStringŒ^‚ğ•Ô‚µŒ^”»’è‚Ìˆ—‚ª•s—v‚Æ‚È‚é
+'â– æ–‡å­—åˆ—æ“ä½œ
+'é–¢æ•°åã®å¾Œã‚ã«ã€Œï¼„ã€ã‚’ä»˜ã‘ã‚‹ã¨Stringå‹ã‚’è¿”ã—å‹åˆ¤å®šã®å‡¦ç†ãŒä¸è¦ã¨ãªã‚‹
 
 str = Replace$("test", "t", "")
 str = Left$("090-1234-5678", 3)
@@ -222,31 +222,31 @@ str = Mid$("090-1234-5678", 5, 4)
 str = Right$("090-1234-5678", 3)
 
 '------------------------------------------------------------------------------
-'¡”z—ñ
+'â– é…åˆ—
 arr = rng.Value
 
 For i = LBound(arr, 1) To UBound(arr, 1)
     For j = LBound(arr, 2) To UBound(arr, 2)
-        'arr(i, j)‚ğˆ—
+        'arr(i, j)ã‚’å‡¦ç†
     Next j
 Next i
 
 rng.Value = arr
 
-'1ŸŒ³”z—ñ‚©H2ŸŒ³‚©H
+'1æ¬¡å…ƒé…åˆ—ã‹ï¼Ÿ2æ¬¡å…ƒã‹ï¼Ÿ
 If IsArray(arr) Then
 End If
 
-'”z—ñƒTƒCƒYæ“¾
+'é…åˆ—ã‚µã‚¤ã‚ºå–å¾—
 tmp = UBound(arr) - LBound(arr) + 1
 
-'”z—ñ‰Šú‰»
+'é…åˆ—åˆæœŸåŒ–
 Erase arr
 
-'“®“I”z—ñŠg’£
+'å‹•çš„é…åˆ—æ‹¡å¼µ
 ReDim Preserve arr(1 To newSize)
 
-'—ñ‚ğ1ŸŒ³‚É
+'åˆ—ã‚’1æ¬¡å…ƒã«
 arr = rng.Value
 ReDim colArr(1 To UBound(arr, 1))
 
@@ -254,7 +254,7 @@ For i = 1 To UBound(arr, 1)
     colArr(i) = arr(i, 1)
 Next i
 
-'”z—ñƒtƒBƒ‹ƒ^iğŒ’Šoj
+'é…åˆ—ãƒ•ã‚£ãƒ«ã‚¿ï¼ˆæ¡ä»¶æŠ½å‡ºï¼‰
 For i = 1 To UBound(arr)
     If arr(i) <> "" Then
         cnt = cnt + 1
@@ -263,40 +263,40 @@ For i = 1 To UBound(arr)
     End If
 Next i
 
-'”z—ñƒRƒs[
+'é…åˆ—ã‚³ãƒ”ãƒ¼
 destArr = srcArr
 
-'”z—ñ@¨@Join i•¶š—ñ‰»j
+'é…åˆ—ã€€â†’ã€€Join ï¼ˆæ–‡å­—åˆ—åŒ–ï¼‰
 str = Join(arr, ",")
 
-'Split ¨ ”z—ñ
+'Split â†’ é…åˆ—
 arr = Split(str, ",")
 
 End Sub
 
-'Šg’£—pŠÖ”
-'EŒ‹‡ƒZƒ‹l—¶
-'E1ƒZƒ‹‚¾‚¯‚Ìê‡‚Í1ŸŒ³
-'EƒGƒ‰[’l‚ğœŠO
-'E‹ós‚ğƒgƒŠƒ€
+'æ‹¡å¼µç”¨é–¢æ•°
+'ãƒ»çµåˆã‚»ãƒ«è€ƒæ…®
+'ãƒ»1ã‚»ãƒ«ã ã‘ã®å ´åˆã¯1æ¬¡å…ƒ
+'ãƒ»ã‚¨ãƒ©ãƒ¼å€¤ã‚’é™¤å¤–
+'ãƒ»ç©ºè¡Œã‚’ãƒˆãƒªãƒ 
 Function GetRangeToArray(rng As Range) As Variant
-    '‘Oˆ—
+    'å‰å‡¦ç†
     GetRangeToArray = rng.Value
-    'Œãˆ—
+    'å¾Œå‡¦ç†
 End Function
 
-'u”z—ñ‚ğ‘‚«–ß‚·v‚Æ‚¢‚¤‘€ì‚É–¼‘O‚ğ•t‚¯‚ÄAÀ‘•Ú×‚Æ«—ˆ‚Ì•ÏX“_‚ğW–ñ
-'”z—ñ arr ‚ÌƒTƒCƒY‚É‡‚í‚¹‚Ä Range ‚ğŠg’£‚µA‚»‚Ì”ÍˆÍ‚ÉˆêŠ‡‚Å‘‚«–ß‚·
-'EƒTƒCƒY’²®
-'E‘‚«‚İ‘O‚ÉƒV[ƒgƒNƒŠƒA
-'EŠù‘¶ƒf[ƒ^‚ğÁ‚·‚©Šm”F
-'E‘‚«‚İŒ`®‚ğ Value2 ‚É‚·‚é
-'E‘‚«‚İƒƒO‚ğ‚Æ‚é
+'ã€Œé…åˆ—ã‚’æ›¸ãæˆ»ã™ã€ã¨ã„ã†æ“ä½œã«åå‰ã‚’ä»˜ã‘ã¦ã€å®Ÿè£…è©³ç´°ã¨å°†æ¥ã®å¤‰æ›´ç‚¹ã‚’é›†ç´„
+'é…åˆ— arr ã®ã‚µã‚¤ã‚ºã«åˆã‚ã›ã¦ Range ã‚’æ‹¡å¼µã—ã€ãã®ç¯„å›²ã«ä¸€æ‹¬ã§æ›¸ãæˆ»ã™
+'ãƒ»ã‚µã‚¤ã‚ºèª¿æ•´
+'ãƒ»æ›¸ãè¾¼ã¿å‰ã«ã‚·ãƒ¼ãƒˆã‚¯ãƒªã‚¢
+'ãƒ»æ—¢å­˜ãƒ‡ãƒ¼ã‚¿ã‚’æ¶ˆã™ã‹ç¢ºèª
+'ãƒ»æ›¸ãè¾¼ã¿å½¢å¼ã‚’ Value2 ã«ã™ã‚‹
+'ãƒ»æ›¸ãè¾¼ã¿ãƒ­ã‚°ã‚’ã¨ã‚‹
 Sub WriteArrayToRange(arr As Variant, rng As Range)
-    '‘Oˆ—
+    'å‰å‡¦ç†
     rng.ClearContents
     rng.Resize(UBound(arr, 1), UBound(arr, 2)).Value = arr
-    'Œãˆ—
+    'å¾Œå‡¦ç†
 End Sub
 
 
@@ -304,22 +304,22 @@ End Sub
 Sub library2()
 
 '------------------------------------------------------------------------------
-'¡ŒÄ‚Ño‚µ’l‚Ìˆ—‘¬“x
-'u’l“n‚µiByValjv ‚Ì LongŒ^‚ªÅ‘¬
-'¦uQÆ“n‚µiByRefjv‚ÌStringŒ^‚ªÅ‚à’x‚¢
+'â– å‘¼ã³å‡ºã—å€¤ã®å‡¦ç†é€Ÿåº¦
+'ã€Œå€¤æ¸¡ã—ï¼ˆByValï¼‰ã€ ã® Longå‹ãŒæœ€é€Ÿ
+'â€»ã€Œå‚ç…§æ¸¡ã—ï¼ˆByRefï¼‰ã€ã®Stringå‹ãŒæœ€ã‚‚é…ã„
 
 '------------------------------------------------------------------------------
-'¡ƒCƒ~ƒfƒBƒGƒCƒgƒEƒBƒ“ƒhƒE
+'â– ã‚¤ãƒŸãƒ‡ã‚£ã‚¨ã‚¤ãƒˆã‚¦ã‚£ãƒ³ãƒ‰ã‚¦
 Debug.Print tStart
 
 '------------------------------------------------------------------------------
-'¡ƒGƒ‰[ˆ—
-On Error Resume Next        'ƒGƒ‰[”­¶Œã‚àŸ‚Ìˆ—‚ğÀs
-On Error GoTo 0                 'ƒGƒ‰[ƒŠƒZƒbƒg
+'â– ã‚¨ãƒ©ãƒ¼å‡¦ç†
+On Error Resume Next        'ã‚¨ãƒ©ãƒ¼ç™ºç”Ÿå¾Œã‚‚æ¬¡ã®å‡¦ç†ã‚’å®Ÿè¡Œ
+On Error GoTo 0                 'ã‚¨ãƒ©ãƒ¼ãƒªã‚»ãƒƒãƒˆ
 
 
 '------------------------------------------------------------------------------
-'¡ExcelŠÖ”g—p
+'â– Excelé–¢æ•°ä½¿ç”¨
 buf1 = Application.WorksheetFunction.VLookup(searchData, _
                                                 Range("B1:C2000"), 2, False)    'VLookup
     
@@ -327,27 +327,28 @@ buf1 = Application.WorksheetFunction.VLookup(searchData, _
 
 
 '------------------------------------------------------------------------------
-'Œx‚ğ§ŒäuƒuƒbƒN‚ğ•Â‚¶‚é‚Æ‚«‚É•Û‘¶Šm”F‚ğo‚³‚È‚¢v
-Application.DisplayAlerts = False   'Œx‚ğ”ñ•\¦
-Application.DisplayAlerts = True    'Œx‚ğ•\¦
+'è­¦å‘Šã‚’åˆ¶å¾¡ã€Œãƒ–ãƒƒã‚¯ã‚’é–‰ã˜ã‚‹ã¨ãã«ä¿å­˜ç¢ºèªã‚’å‡ºã•ãªã„ã€
+Application.DisplayAlerts = False   'è­¦å‘Šã‚’éè¡¨ç¤º
+Application.DisplayAlerts = True    'è­¦å‘Šã‚’è¡¨ç¤º
 
 
 
 
 '------------------------------------------------------------------------------
-'¡‚‘¬‰»ŠJn
-Application.ScreenUpdating = False                       '‰æ–Ê•`‰æ‚ğˆê’â~
-Application.EnableEvents = False                          'ƒCƒxƒ“ƒgˆ—‚ğ–³‹‚·‚é
-Application.Calculation = xlCalculationManual       'è“®ŒvZ‚ÉØ‚è‘Ö‚¦‚é
+'â– é«˜é€ŸåŒ–é–‹å§‹
+Application.ScreenUpdating = False                       'ç”»é¢æç”»ã‚’ä¸€æ™‚åœæ­¢
+Application.EnableEvents = False                          'ã‚¤ãƒ™ãƒ³ãƒˆå‡¦ç†ã‚’ç„¡è¦–ã™ã‚‹
+Application.Calculation = xlCalculationManual       'æ‰‹å‹•è¨ˆç®—ã«åˆ‡ã‚Šæ›¿ãˆã‚‹
 
 
 '------------------------------------------------------------------------------
-'¡‚‘¬‰»I—¹
-Application.ScreenUpdating = True                          '‰æ–Ê•`‰æ‚ğŠJn
-Application.EnableEvents = True                             'ƒCƒxƒ“ƒgˆ—‚ğ—LŒø‚É‚·‚é
-Application.Calculation = xlCalculationAutomatic     '©“®ŒvZ‚ÉØ‚è‘Ö‚¦‚é
-Application.Calculate                                                'ExcelŠÖ”‚ğÄŒvZ
+'â– é«˜é€ŸåŒ–çµ‚äº†
+Application.ScreenUpdating = True                          'ç”»é¢æç”»ã‚’é–‹å§‹
+Application.EnableEvents = True                             'ã‚¤ãƒ™ãƒ³ãƒˆå‡¦ç†ã‚’æœ‰åŠ¹ã«ã™ã‚‹
+Application.Calculation = xlCalculationAutomatic     'è‡ªå‹•è¨ˆç®—ã«åˆ‡ã‚Šæ›¿ãˆã‚‹
+Application.Calculate                                                'Excelé–¢æ•°ã‚’å†è¨ˆç®—
 
 
 
 End Sub
+
