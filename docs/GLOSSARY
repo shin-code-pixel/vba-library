@@ -1,0 +1,13 @@
+--- Ｗ ---
+:ラッパー（wrapper）
+  「本命の処理を包むだけの薄い仲介用のSub」
+  ラッパー = wrap（包む）から来た言葉
+  「何かをそのまま呼べないときに、１枚かぶせる皮」
+
+  (例)　Public Call_SetTimeout_Negative()
+          Mdl_AppRuntime.VBL_TimeoutMs = -1
+        End Sub
+
+  中身はただ１行で、エラーを出す本命処理を「包んでいるだけ」
+
+　
