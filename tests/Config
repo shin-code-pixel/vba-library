@@ -1,0 +1,10 @@
+tests/
+  harness/
+    Mdl_TestRunner.bas
+    Mdl_Assert.bas
+  cases/
+    Test_AppRuntime.bas
+    Test_String.bas
+  fixtures/
+    sample.csv
+    sample.xlsx
