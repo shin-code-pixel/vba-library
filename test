@@ -1,0 +1,81 @@
+Option Explicit
+
+' =========================
+' Test Runner
+' - 全テスト一括実行
+' - Immediate Window に結果出力
+' =========================
+
+Private Type TTestResult
+    Total As Long
+    Passed As Long
+    Failed As Long
+    Skipped As Long
+End Type
+
+' 入口：全テスト実行
+Public Sub RunAllTests()
+    Dim res As TTestResult
+    Dim t0 As Double: t0 = Timer
+
+    Debug.Print String$(60, "=")
+    Debug.Print "[TEST] RunAllTests START  " & Now
+    Debug.Print String$(60, "-")
+
+    ' ここに「テストモジュール」を追加してください
+    RunTestModule "Test_String", res
+    RunTestModule "Test_AppRuntime", res
+    ' RunTestModule "Test_File", res  ' 例
+
+    Debug.Print String$(60, "-")
+    Debug.Print "[TEST] Total=" & res.Total & "  Passed=" & res.Passed & "  Failed=" & res.Failed & "  Skipped=" & res.Skipped
+    Debug.Print "[TEST] Elapsed=" & Format$(Timer - t0, "0.000") & " sec"
+    Debug.Print "[TEST] RunAllTests END    " & Now
+    Debug.Print String$(60, "=")
+
+    If res.Failed > 0 Then
+        MsgBox "テスト失敗あり: " & res.Failed & " 件（Immediate Window を確認してください）", vbExclamation
+    Else
+        MsgBox "テスト全件成功: " & res.Passed & " 件", vbInformation
+    End If
+End Sub
+
+' -------------------------
+' テストモジュール実行
+' -------------------------
+Private Sub RunTestModule(ByVal moduleName As String, ByRef res As TTestResult)
+    Debug.Print "[TEST] Module: " & moduleName
+
+    ' テスト一覧：Public Sub Test_* を手で列挙する方式（VBAで一番壊れにくい）
+    ' ※ 自動列挙（VBIDEでProc一覧取得）も可能ですが、参照/設定地雷になるため避けます。
+
+    Select Case moduleName
+        Case "Test_String"
+            RunCase moduleName & ".Test_InStr_Contains", res
+            RunCase moduleName & ".Test_InStr_NotContains", res
+
+        Case "Test_AppRuntime"
+            RunCase moduleName & ".Test_Timeout_Sample", res
+
+        Case Else
+            res.Total = res.Total + 1
+            res.Skipped = res.Skipped + 1
+            Debug.Print "  - SKIP (module not registered)"
+    End Select
+End Sub
+
+Private Sub RunCase(ByVal procFullName As String, ByRef res As TTestResult)
+    res.Total = res.Total + 1
+
+    On Error GoTo FAIL
+    Application.Run procFullName
+    res.Passed = res.Passed + 1
+    Debug.Print "  - PASS  " & procFullName
+    Exit Sub
+
+FAIL:
+    res.Failed = res.Failed + 1
+    Debug.Print "  - FAIL  " & procFullName
+    Debug.Print "          Err=" & Err.Number & "  " & Err.Description
+    Err.Clear
+End Sub
