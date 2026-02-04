@@ -3,8 +3,8 @@ Option Explicit
 
 ' =========================
 ' Test Runner
-' - ‘SƒeƒXƒgˆêŠ‡Às
-' - Immediate Window ‚ÉŒ‹‰Êo—Í
+' - å…¨ãƒ†ã‚¹ãƒˆä¸€æ‹¬å®Ÿè¡Œ
+' - Immediate Window ã«çµæœå‡ºåŠ›
 ' =========================
 
 Private Type TTestResult
@@ -15,7 +15,7 @@ Private Type TTestResult
 End Type
 
 '============================
-' “üŒûF‘SƒeƒXƒgˆêŠ‡Àsi“o˜^ƒeƒXƒgˆê——j
+' å…¥å£ï¼šå…¨ãƒ†ã‚¹ãƒˆä¸€æ‹¬å®Ÿè¡Œï¼ˆç™»éŒ²ãƒ†ã‚¹ãƒˆä¸€è¦§ï¼‰
 '============================
 Public Sub RunAllTests()
     Dim res As TTestResult
@@ -25,7 +25,7 @@ Public Sub RunAllTests()
     Debug.Print "[TEST] RunAllTests START  " & Now
     Debug.Print String$(60, "-")
 
-    '  ---- “o˜^ƒeƒXƒgˆê——i‚±‚±‚¾‚¯‘‚â‚·j----
+    '  ---- ç™»éŒ²ãƒ†ã‚¹ãƒˆä¸€è¦§ï¼ˆã“ã“ã ã‘å¢—ã‚„ã™ï¼‰----
     RunTestModule "Mdl_Test_AppRuntime", res
     RunTestModule "Mdl_Test_String", res
 '    RunTestModule "Mdl_Test_File", res
@@ -40,20 +40,20 @@ Public Sub RunAllTests()
     Debug.Print String$(60, "=")
 
     If res.Failed > 0 Then
-        MsgBox "ƒeƒXƒg¸”s‚ ‚è: " & res.Failed & " ŒiImmediate Window ‚ğŠm”F‚µ‚Ä‚­‚¾‚³‚¢j", vbExclamation
+        MsgBox "ãƒ†ã‚¹ãƒˆå¤±æ•—ã‚ã‚Š: " & res.Failed & " ä»¶ï¼ˆImmediate Window ã‚’ç¢ºèªã—ã¦ãã ã•ã„ï¼‰", vbExclamation
     Else
-        MsgBox "ƒeƒXƒg‘SŒ¬Œ÷: " & res.Passed & " Œ", vbInformation
+        MsgBox "ãƒ†ã‚¹ãƒˆå…¨ä»¶æˆåŠŸ: " & res.Passed & " ä»¶", vbInformation
     End If
 End Sub
 
 '============================
-' ƒ‚ƒWƒ…[ƒ‹’PˆÊ‚ÅƒeƒXƒg‚ğÀs
+' ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«å˜ä½ã§ãƒ†ã‚¹ãƒˆã‚’å®Ÿè¡Œ
 '============================
 Private Sub RunTestModule(ByVal moduleName As String, ByRef res As TTestResult)
     Debug.Print "[TEST] Module: " & moduleName
 
-    ' ƒeƒXƒgˆê——FPublic Sub Test_* ‚ğè‚Å—ñ‹“‚·‚é•û®iVBA‚Åˆê”Ô‰ó‚ê‚É‚­‚¢j
-    ' ¦ ©“®—ñ‹“iVBIDE‚ÅProcˆê——æ“¾j‚à‰Â”\‚Å‚·‚ªAQÆ/İ’è’n—‹‚É‚È‚é‚½‚ß”ğ‚¯‚Ü‚·B
+    ' ãƒ†ã‚¹ãƒˆä¸€è¦§ï¼šPublic Sub Test_* ã‚’æ‰‹ã§åˆ—æŒ™ã™ã‚‹æ–¹å¼ï¼ˆVBAã§ä¸€ç•ªå£Šã‚Œã«ãã„ï¼‰
+    ' â€» è‡ªå‹•åˆ—æŒ™ï¼ˆVBIDEã§Procä¸€è¦§å–å¾—ï¼‰ã‚‚å¯èƒ½ã§ã™ãŒã€å‚ç…§/è¨­å®šåœ°é›·ã«ãªã‚‹ãŸã‚é¿ã‘ã¾ã™ã€‚
 
     Select Case moduleName
           Case "Mdl_Test_AppRuntime"
@@ -92,7 +92,7 @@ Private Sub RunCase(ByVal procFullName As String, ByRef res As TTestResult)
     On Error Resume Next
     Application.Run fullName
 
-    ' ƒeƒXƒg–{‘Ì‚ª—‚¿‚½i—\Šú‚¹‚ÊÀsƒGƒ‰[j
+    ' ãƒ†ã‚¹ãƒˆæœ¬ä½“ãŒè½ã¡ãŸï¼ˆäºˆæœŸã›ã¬å®Ÿè¡Œæ™‚ã‚¨ãƒ©ãƒ¼ï¼‰
     If Err.Number <> 0 Then
         res.Failed = res.Failed + 1
         Debug.Print " - FAIL  " & fullName
@@ -102,7 +102,7 @@ Private Sub RunCase(ByVal procFullName As String, ByRef res As TTestResult)
         Exit Sub
     End If
 
-    ' Assert‚Å¸”s‚µ‚½
+    ' Assertã§å¤±æ•—ã—ãŸ
     If Mdl_TestState.gCaseFailed Then
         res.Failed = res.Failed + 1
         Debug.Print " - FAIL  " & fullName
