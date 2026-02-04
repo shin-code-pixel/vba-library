@@ -1,3 +1,4 @@
+■ 構造
 src/  ※本体モジュール
     『Mdl_AppRuntime.bas』
     『Mdl_String.bas』
@@ -42,3 +43,30 @@ tests/
     sample.xlsx
     sample.json
     (例)・CSV読み込みテスト用　・Excelファイル操作テスト用　・JSONパーステスト用
+
+--------------------------------------------------------------------------------------------------------
+■ 基本の使い方
+
+　① 何か機能を作る/直す
+    例:・Mdl_String に新しい関数を追加
+    　 ・Mdl_Fileのバグ修正
+
+　② 対応するテストを書く
+    必ず cases/ にテストを追加します。
+
+    例:　'Mdl_Test_String.bas
+         Public Sub Test_NewFunc_Basic()
+            Dim r As String
+            r = Mdl_Sting.関数名("ABC")
+            Mdl_Assert.AssertEquals "abc", r
+        Ens Sub
+
+    ※「本体１モジュールにつきテスト１モジュール」が原則
+
+　 ③ RunAllTests を実行
+     Mdl_TestRunner.RunAllTests
+
+     ・全PASS → 安心して次へ進む
+     ・FAILあり　→　壊した場所がログで即わかる
+
+
