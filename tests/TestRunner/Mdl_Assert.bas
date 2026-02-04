@@ -39,7 +39,7 @@ Public Sub AssertContains(ByVal haystack As String, ByVal needle As String, Opti
     End If
 End Sub
 
-' --- ˆÈ‰º‚Í¡‚Ì‚ ‚È‚½‚Ì‚Ü‚Ü‚ÅOKi“à•”ƒ†[ƒeƒBƒŠƒeƒBj ---
+' --- ä»¥ä¸‹ã¯ä»Šã®ã‚ãªãŸã®ã¾ã¾ã§OKï¼ˆå†…éƒ¨ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£ï¼‰ ---
 Private Function VariantEquals(ByVal a As Variant, ByVal b As Variant) As Boolean
     If IsNull(a) And IsNull(b) Then VariantEquals = True: Exit Function
     If IsEmpty(a) And IsEmpty(b) Then VariantEquals = True: Exit Function
