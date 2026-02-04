@@ -1,66 +1,34 @@
-Option Explicit
+Private Sub RunCase(ByVal procFullName As String, ByRef res As TTestResult)
+    res.Total = res.Total + 1
 
-Public Sub AssertTrue(ByVal condition As Boolean, Optional ByVal message As String = "")
-    If Not condition Then
-        Mdl_TestState.VBL_TestFail NzMsg(message, "Expected True, but was False.")
+    Dim fullName As String
+    fullName = "'" & ThisWorkbook.Name & "'!" & procFullName
+
+    Mdl_TestState.VBL_TestCaseReset
+
+    Err.Clear
+    On Error Resume Next
+    Application.Run fullName
+
+    ' テスト本体が落ちた（予期せぬ実行時エラー）
+    If Err.Number <> 0 Then
+        res.Failed = res.Failed + 1
+        Debug.Print " - FAIL  " & fullName
+        Debug.Print "        Err=" & Err.Number & " " & Err.Description
+        Err.Clear
+        On Error GoTo 0
+        Exit Sub
     End If
-End Sub
 
-Public Sub AssertFalse(ByVal condition As Boolean, Optional ByVal message As String = "")
-    If condition Then
-        Mdl_TestState.VBL_TestFail NzMsg(message, "Expected False, but was True.")
-    End If
-End Sub
-
-Public Sub AssertEquals(ByVal expected As Variant, ByVal actual As Variant, Optional ByVal message As String = "")
-    If Not VariantEquals(expected, actual) Then
-        Mdl_TestState.VBL_TestFail NzMsg(message, _
-            "Not equal. expected=[" & ToDebugText(expected) & "] actual=[" & ToDebugText(actual) & "]")
-    End If
-End Sub
-
-Public Sub AssertNotEquals(ByVal notExpected As Variant, ByVal actual As Variant, Optional ByVal message As String = "")
-    If VariantEquals(notExpected, actual) Then
-        Mdl_TestState.VBL_TestFail NzMsg(message, "Should not equal. value=[" & ToDebugText(actual) & "]")
-    End If
-End Sub
-
-Public Sub AssertNotNothing(ByVal obj As Object, Optional ByVal message As String = "")
-    If obj Is Nothing Then
-        Mdl_TestState.VBL_TestFail NzMsg(message, "Object is Nothing.")
-    End If
-End Sub
-
-Public Sub AssertContains(ByVal haystack As String, ByVal needle As String, Optional ByVal message As String = "")
-    If InStr(1, haystack, needle, vbBinaryCompare) = 0 Then
-        Mdl_TestState.VBL_TestFail NzMsg(message, _
-            "Not contains. needle=[" & needle & "] haystack=[" & haystack & "]")
-    End If
-End Sub
-
-' --- 以下は今のあなたのままでOK（内部ユーティリティ） ---
-Private Function VariantEquals(ByVal a As Variant, ByVal b As Variant) As Boolean
-    If IsNull(a) And IsNull(b) Then VariantEquals = True: Exit Function
-    If IsEmpty(a) And IsEmpty(b) Then VariantEquals = True: Exit Function
-    If IsDate(a) And IsDate(b) Then VariantEquals = (CDbl(CDate(a)) = CDbl(CDate(b))): Exit Function
-    If IsNumeric(a) And IsNumeric(b) Then VariantEquals = (CDbl(a) = CDbl(b)): Exit Function
-    VariantEquals = (CStr(a) = CStr(b))
-End Function
-
-Private Function ToDebugText(ByVal v As Variant) As String
-    If IsNull(v) Then
-        ToDebugText = "<Null>"
-    ElseIf IsEmpty(v) Then
-        ToDebugText = "<Empty>"
+    ' Assertで失敗した
+    If Mdl_TestState.gCaseFailed Then
+        res.Failed = res.Failed + 1
+        Debug.Print " - FAIL  " & fullName
+        Debug.Print "        " & Mdl_TestState.gCaseFailMsg
     Else
-        ToDebugText = CStr(v)
+        res.Passed = res.Passed + 1
+        Debug.Print " - PASS  " & fullName
     End If
-End Function
 
-Private Function NzMsg(ByVal msg As String, ByVal fallback As String) As String
-    If Len(Trim$(msg)) = 0 Then
-        NzMsg = fallback
-    Else
-        NzMsg = msg
-    End If
-End Function
+    On Error GoTo 0
+End Sub
