@@ -1,104 +1,15 @@
 Option Explicit
 
-' =========================
-' Test Runner
-' - 全テスト一括実行
-' - Immediate Window に結果出力
-' =========================
+Public gCaseFailed As Boolean
+Public gCaseFailMsg As String
 
-Private Type TTestResult
-    Total As Long
-    Passed As Long
-    Failed As Long
-    Skipped As Long
-End Type
-
-'============================
-' 入口：全テスト一括実行（登録テスト一覧）
-'============================
-Public Sub RunAllTests()
-    Dim res As TTestResult
-    Dim t0 As Double: t0 = Timer
-
-    Debug.Print String$(60, "=")
-    Debug.Print "[TEST] RunAllTests START  " & Now
-    Debug.Print String$(60, "-")
-
-    '  ---- 登録テスト一覧（ここだけ増やす）----
-    RunTestModule "Mdl_Test_AppRuntime", res
-    RunTestModule "Mdl_Test_String", res
-'    RunTestModule "Mdl_Test_File", res
-'    RunTestModule "Mdl_Test_Json", res
-    RunTestModule "Mdl_Test_TimeoutSample", res
-    '  ----------------------------------------------------
-
-    Debug.Print String$(60, "-")
-    Debug.Print "[TEST] Total=" & res.Total & "  Passed=" & res.Passed & "  Failed=" & res.Failed & "  Skipped=" & res.Skipped
-    Debug.Print "[TEST] Elapsed=" & Format$(Timer - t0, "0.000") & " sec"
-    Debug.Print "[TEST] RunAllTests END    " & Now
-    Debug.Print String$(60, "=")
-
-    If res.Failed > 0 Then
-        MsgBox "テスト失敗あり: " & res.Failed & " 件（Immediate Window を確認してください）", vbExclamation
-    Else
-        MsgBox "テスト全件成功: " & res.Passed & " 件", vbInformation
-    End If
+Public Sub VBL_TestCaseReset()
+    gCaseFailed = False
+    gCaseFailMsg = vbNullString
 End Sub
 
-'============================
-' モジュール単位でテストを実行
-'============================
-Private Sub RunTestModule(ByVal moduleName As String, ByRef res As TTestResult)
-    Debug.Print "[TEST] Module: " & moduleName
-
-    ' テスト一覧：Public Sub Test_* を手で列挙する方式（VBAで一番壊れにくい）
-    ' ※ 自動列挙（VBIDEでProc一覧取得）も可能ですが、参照/設定地雷になるため避けます。
-
-    Select Case moduleName
-          Case "Mdl_Test_AppRuntime"
-            RunCase moduleName & ".Test_PerfEnterLeave_RestoreState", res
-            RunCase moduleName & ".Test_TimeoutMs_AllowRangeEdges", res
-            RunCase moduleName & ".Test_TimeoutMs_RejectNegative", res
-            RunCase moduleName & ".Test_TimeoutMs_RejectOverMax", res
-            RunCase moduleName & ".Test_TickTock_NonNegative", res
-            RunCase moduleName & ".Test_Tock_MidnightWrap", res
-    
-        Case "Mdl_Test_String"
-            RunCase moduleName & ".Test_InStr_Contains", res
-            RunCase moduleName & ".Test_InStr_NotContains", res
-
-        Case "Mdl_Test_TimeoutSample"
-            res.Total = res.Total + 1
-            res.Skipped = res.Skipped + 1
-            Debug.Print "  - SKIP (module not registered)"
-
-        Case Else
-            res.Total = res.Total + 1
-            res.Skipped = res.Skipped + 1
-            Debug.Print "  - SKIP (module not registered)"
-    End Select
-End Sub
-
-Private Sub RunCase(ByVal procFullName As String, ByRef res As TTestResult)
-    res.Total = res.Total + 1
-
-    Dim fullName As String
-    fullName = "'" & ThisWorkbook.name & "'!" & procFullName
-
-    Err.Clear
-    On Error Resume Next
-    
-    CallByName Me, procFullName, VbMethod
-    
-    If Err.Number = 0 Then
-        res.Passed = res.Passed + 1
-        Debug.Print " - PASS  " & fullName
-    Else
-        res.Failed = res.Failed + 1
-        Debug.Print "  - FAIL  " & fullName
-        Debug.Print "          Err=" & Err.Number & "  " & Err.Description
-        Err.Clear
-    End If
-    
-    On Error GoTo 0
+Public Sub VBL_TestFail(ByVal msg As String)
+    gCaseFailed = True
+    If Len(gCaseFailMsg) > 0 Then gCaseFailMsg = gCaseFailMsg & " | "
+    gCaseFailMsg = gCaseFailMsg & msg
 End Sub
