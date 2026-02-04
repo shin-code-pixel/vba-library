@@ -1,3 +1,4 @@
 Public Sub Test_TimeoutMs_AllowRangeEdges()
     ' 下限 0
-    Mdl_AppRuntime.VBL_TimeoutMs = 0
+    Mdl_AppRuntime.VBL_TimeoutMs 0
+    Mdl_Assert.AssertEquals 0, Mdl_AppRuntime.VBL_TimeoutMs, "TimeoutMs should accept 0"
