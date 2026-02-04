@@ -1,0 +1,138 @@
+目的の要約：Excelに「汎用テストケース表」シートを自動生成するVBAコードが欲しい、ですね。
+以下を **標準モジュール（例：Mdl_TestCaseSheet）**に貼って実行してください。
+（実行：VBL_CreateTestCaseSheet）
+コードをコピーする
+Vb
+Option Explicit
+
+'========================================
+' 汎用テストケース表シートを作成
+' - 既存シートがあれば削除して作り直し（確認ダイアログあり）
+' - ヘッダ、書式、フィルタ、固定、入力規則を設定
+'========================================
+Public Sub VBL_CreateTestCaseSheet(Optional ByVal sheetName As String = "TestCases")
+    Dim wb As Workbook
+    Set wb = ThisWorkbook
+    
+    Dim ws As Worksheet
+    If SheetExists(wb, sheetName) Then
+        If MsgBox("シート '" & sheetName & "' は既に存在します。削除して作り直しますか？", _
+                  vbYesNo + vbQuestion) <> vbYes Then
+            Exit Sub
+        End If
+        
+        Application.DisplayAlerts = False
+        wb.Worksheets(sheetName).Delete
+        Application.DisplayAlerts = True
+    End If
+    
+    Set ws = wb.Worksheets.Add(After:=wb.Worksheets(wb.Worksheets.Count))
+    ws.Name = sheetName
+    
+    ' 列定義（固定）
+    Dim headers As Variant
+    headers = Array( _
+        "TC_ID", _
+        "対象（モジュール/関数/画面）", _
+        "観点（VAL/BND/FMT/IO/FLOW/ERR/CON/PERF/CFG）", _
+        "前提条件", _
+        "入力", _
+        "操作", _
+        "期待結果", _
+        "実結果", _
+        "判定（OK/NG）", _
+        "証跡（ファイル/スクショ/ログ）", _
+        "備考" _
+    )
+    
+    Dim i As Long
+    For i = LBound(headers) To UBound(headers)
+        ws.Cells(1, i + 1).Value = headers(i)
+    Next
+    
+    ' ヘッダ書式
+    With ws.Range(ws.Cells(1, 1), ws.Cells(1, UBound(headers) + 1))
+        .Font.Bold = True
+        .WrapText = True
+        .VerticalAlignment = xlVAlignCenter
+        .Interior.Color = RGB(230, 230, 230)
+        .Borders.LineStyle = xlContinuous
+    End With
+    
+    ' 使う範囲をテーブル化（フィルタ付き）
+    Dim tbl As ListObject
+    Set tbl = ws.ListObjects.Add( _
+        SourceType:=xlSrcRange, _
+        Source:=ws.Range(ws.Cells(1, 1), ws.Cells(2, UBound(headers) + 1)), _
+        XlListObjectHasHeaders:=xlYes)
+    tbl.Name = "tbl_TestCases"
+    tbl.TableStyle = "TableStyleLight9"
+    
+    ' 列幅（最小限）
+    ws.Columns(1).ColumnWidth = 12   ' TC_ID
+    ws.Columns(2).ColumnWidth = 28   ' 対象
+    ws.Columns(3).ColumnWidth = 18   ' 観点
+    ws.Columns(4).ColumnWidth = 22   ' 前提
+    ws.Columns(5).ColumnWidth = 18   ' 入力
+    ws.Columns(6).ColumnWidth = 18   ' 操作
+    ws.Columns(7).ColumnWidth = 26   ' 期待
+    ws.Columns(8).ColumnWidth = 26   ' 実結果
+    ws.Columns(9).ColumnWidth = 12   ' 判定
+    ws.Columns(10).ColumnWidth = 22  ' 証跡
+    ws.Columns(11).ColumnWidth = 22  ' 備考
+    
+    ' 行高
+    ws.Rows(1).RowHeight = 36
+    
+    ' ウィンドウ固定（ヘッダ行）
+    ws.Activate
+    ws.Range("A2").Select
+    ActiveWindow.FreezePanes = True
+    
+    ' 入力規則：観点（VAL/BND/FMT/IO/FLOW/ERR/CON/PERF/CFG）
+    ApplyListValidation ws, tbl.ListColumns(3).DataBodyRange, _
+        "VAL,BND,FMT,IO,FLOW,ERR,CON,PERF,CFG"
+    
+    ' 入力規則：判定（OK/NG）
+    ApplyListValidation ws, tbl.ListColumns(9).DataBodyRange, _
+        "OK,NG"
+    
+    ' 2行目は空欄のまま（テーブル維持のため）
+    ws.Cells(2, 1).Value = ""
+    
+    ' 罫線（見やすさ）
+    With ws.Range(ws.Cells(1, 1), ws.Cells(200, UBound(headers) + 1))
+        .Borders.LineStyle = xlContinuous
+        .Borders.Color = RGB(210, 210, 210)
+    End With
+    
+    ws.Range("A1").Select
+End Sub
+
+'----------------------------------------
+' 内部：シート存在チェック
+'----------------------------------------
+Private Function SheetExists(ByVal wb As Workbook, ByVal sheetName As String) As Boolean
+    On Error Resume Next
+    SheetExists = Not wb.Worksheets(sheetName) Is Nothing
+    On Error GoTo 0
+End Function
+
+'----------------------------------------
+' 内部：リスト入力規則（ドロップダウン）設定
+'----------------------------------------
+Private Sub ApplyListValidation(ByVal ws As Worksheet, ByVal target As Range, ByVal csv As String)
+    If target Is Nothing Then Exit Sub
+    
+    ' 既存の入力規則を削除
+    On Error Resume Next
+    target.Validation.Delete
+    On Error GoTo 0
+    
+    target.Validation.Add Type:=xlValidateList, AlertStyle:=xlValidAlertStop, _
+                          Operator:=xlBetween, Formula1:=csv
+    target.Validation.InCellDropdown = True
+    target.Validation.IgnoreBlank = True
+    target.Validation.ShowError = True
+End Sub
+次は、**「テストケース表から Mdl_Test_*.bas の雛形を自動生成する」**で進めますか？（はい/いいえだけで
