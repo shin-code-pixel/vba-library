@@ -82,16 +82,19 @@ End Sub
 Private Sub RunCase(ByVal procFullName As String, ByRef res As TTestResult)
     res.Total = res.Total + 1
 
+    Dim fullName As String
+    fullName = "'" & ThisWorkbook.name & "'!" & procFullName
+
     On Error GoTo FAIL
-    Application.Run procFullName
+    Application.Run fullName
     
     res.Passed = res.Passed + 1
-    Debug.Print "  - PASS  " & procFullName
+    Debug.Print "  - PASS  " & fullName
     Exit Sub
 
 FAIL:
     res.Failed = res.Failed + 1
-    Debug.Print "  - FAIL  " & procFullName
-    Debug.Print "          Err=" & Err.Number & "  " & Err.Description & "    " & Err.Description
+    Debug.Print "  - FAIL  " & fullName
+    Debug.Print "          Err=" & Err.Number & "  " & Err.Description
     Err.Clear
 End Sub
