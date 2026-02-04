@@ -1,8 +1,2 @@
-Public Sub VBL_TimeoutMs(ByVal v As Long)
-    '10分まで待機可能。それ以降はエラー
-    If v < 0 Or v > 600000 Then
-        Err.Raise vbObjectError + 1001, "VBL_TimeoutMs", _
-                        "Timeout は　0～600000 の範囲で指定してください。"
-    End If
-    mTimeoutMs = v
-End Sub
+    Err.Raise vbObjectError + 1007, "AssertRaises", NzMsg(message, _
+        "Expected error " & expectedErrNumber & ", but got " & gotNum & IIf(Len(gotDesc) > 0, " : " & gotDesc, ""))
