@@ -85,6 +85,8 @@ Private Sub RunCase(ByVal procFullName As String, ByRef res As TTestResult)
     Dim fullName As String
     fullName = "'" & ThisWorkbook.name & "'!" & procFullName
 
+    Err.Clear
+    On Error Resume Next
     Application.Run fullName
     
     If Err.Number = 0 Then
@@ -96,4 +98,6 @@ Private Sub RunCase(ByVal procFullName As String, ByRef res As TTestResult)
         Debug.Print "          Err=" & Err.Number & "  " & Err.Description
         Err.Clear
     End If
+    
+    On Error GoTo 0
 End Sub
