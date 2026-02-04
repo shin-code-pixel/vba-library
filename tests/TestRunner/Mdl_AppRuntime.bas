@@ -2,9 +2,9 @@ Attribute VB_Name = "Mdl_AppRuntime"
 Option Explicit
 Option Private Module
 
-Private mTimeoutMs As Long  'ƒ~ƒŠ•b’PˆÊ‚Ìƒ^ƒCƒ€ƒAƒEƒgŠÔ
+Private mTimeoutMs As Long  'ãƒŸãƒªç§’å˜ä½ã®ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆæ™‚é–“
 
-' ‚‘¬‰»
+' é«˜é€ŸåŒ–
 Public Type T_AppState
     ScreenUpdating As Boolean
     EnableEvents As Boolean
@@ -14,7 +14,7 @@ Public Type T_AppState
 End Type
 
 Public Sub VBL_PerfEnter(ByRef st As T_AppState)
-'¡‚‘¬‰»ŠJn
+'â– é«˜é€ŸåŒ–é–‹å§‹
     With Application
             st.ScreenUpdating = .ScreenUpdating
             st.EnableEvents = .EnableEvents
@@ -22,16 +22,16 @@ Public Sub VBL_PerfEnter(ByRef st As T_AppState)
             st.Calculation = .Calculation
             st.StatusBar = .StatusBar
 
-            .ScreenUpdating = False                       '‰æ–Ê•`‰æ‚ğˆê’â~
-            .EnableEvents = False                          'ƒCƒxƒ“ƒgˆ—‚ğ–³‹‚·‚é
-            .DisplayAlerts = False                           'Œx‚ğ”ñ•\¦
-            .Calculation = xlCalculationManual        'è“®ŒvZ‚ÉØ‚è‘Ö‚¦‚é
-            .StatusBar = "ˆ—’†..."
+            .ScreenUpdating = False                       'ç”»é¢æç”»ã‚’ä¸€æ™‚åœæ­¢
+            .EnableEvents = False                          'ã‚¤ãƒ™ãƒ³ãƒˆå‡¦ç†ã‚’ç„¡è¦–ã™ã‚‹
+            .DisplayAlerts = False                           'è­¦å‘Šã‚’éè¡¨ç¤º
+            .Calculation = xlCalculationManual        'æ‰‹å‹•è¨ˆç®—ã«åˆ‡ã‚Šæ›¿ãˆã‚‹
+            .StatusBar = "å‡¦ç†ä¸­..."
      End With
 End Sub
     
 Public Sub VBL_PerfLeave(ByRef st As T_AppState)
-'¡‚‘¬‰»I—¹
+'â– é«˜é€ŸåŒ–çµ‚äº†
     With Application
             .ScreenUpdating = st.ScreenUpdating
             .EnableEvents = st.EnableEvents
@@ -41,13 +41,13 @@ Public Sub VBL_PerfLeave(ByRef st As T_AppState)
      End With
 End Sub
 
-' ƒ^ƒCƒ€ƒAƒEƒg
+' ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆ
 Public Function VBL_GetTimeoutMs() As Long
     VBL_GetTimeoutMs = mTimeoutMs
 End Function
 
 Public Function VBL_TimeoutMs(ByVal v As Long) As Boolean
-    '10•ª‚Ü‚Å‘Ò‹@‰Â”\B‚»‚êˆÈ~‚ÍƒGƒ‰[
+    '10åˆ†ã¾ã§å¾…æ©Ÿå¯èƒ½ã€‚ãã‚Œä»¥é™ã¯ã‚¨ãƒ©ãƒ¼
     If v < 0 Or v > 600000 Then
         VBL_TimeoutMs = False
         Exit Function
@@ -56,7 +56,7 @@ Public Function VBL_TimeoutMs(ByVal v As Long) As Boolean
     VBL_TimeoutMs = True
 End Function
 
-' ˆ—ŠÔŒv‘ª
+' å‡¦ç†æ™‚é–“è¨ˆæ¸¬
 Public Function VBL_Tick() As Double
         VBL_Tick = Timer
 End Function
@@ -66,7 +66,7 @@ Public Function VBL_Tock(ByVal t0 As Double) As Double
         ti = Timer
         
         If ti < t0 Then
-            '“ú•t‚Ü‚½‚¬(Timer‚Í24ŠÔ‚ÅƒŠƒZƒbƒg‚³‚ê‚é‚½‚ßƒ}ƒCƒiƒX–h~)
+            'æ—¥ä»˜ã¾ãŸã(Timerã¯24æ™‚é–“ã§ãƒªã‚»ãƒƒãƒˆã•ã‚Œã‚‹ãŸã‚ãƒã‚¤ãƒŠã‚¹é˜²æ­¢)
             VBL_Tock = (86400 - t0) + ti
         Else
             VBL_Tock = ti - t0
