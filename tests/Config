@@ -1,27 +1,34 @@
 tests/
-  harness/
+
+  src/  ※本体モジュール
+    『Mdl_AppRuntime.bas』
+    『Mdl_String.bas』
+    『Mdl_File.bas』
+    『...』
+
+  harness/  ※「テストのための共通部品」だけを置く（本体モジュールは置かない）
+
     『Mdl_TestRunner.bas』 "テスト実行エンジン"  [全部のテストを一括実行]
       ▸[Sub]RunAllTests
-          →　Test_* を順番に実行　→　Assert で合否判定
+          →　Mdl_Test_* を順番に実行　→　Assert で合否判定
 
       ▸[Sub]RunTestModule
       ▸[Sub]RunCase
     
     『Mdl_Assert.bas』     "断言ライブラリ"      [期待値チェック専門]
-    『Mdl_AppRuntime.bas』
+    『Mdl_TestUtil.bas』   "ログ出力などを共通補助"
 
+  cases/   ※本体モジュールごとに、必ずテストモジュールが存在する
 
-  ※本体モジュールごとに、必ずテストモジュールが存在する
-  cases/
-    『Mdl_Test_AppRuntime.bas』  "高速化・タイムアウト・計測の仕様確認"
-      →　『Mdl_AppRuntime.bas』を対象
+    『Mdl_Test_AppRuntime.bas』(=Mdl_AppRuntime をテスト)　"高速化・タイムアウト・計測の仕様確認"
+    『Mdl_Test_String.bas』  "文字列系ロジック"  [InStr]等の動作保証
+    『Mdl_Test_File.bas』    "ファイル系"  [パス操作・存在チェック等]
+    『Mdl_Test_Json.bas』
     『Mdl_Test_Timeout_Sample.bas』
     『Mdl_TestRunner.bas』
-    『Mdl_Test_String.bas』  "文字列系ロジック"  [InStr]等の動作保証
-
-    『Mdl_Test_File.bas』  "ファイル系"  [パス操作・存在チェック等]
 
   fixtures/  "入力サンプル固定"
     sample.csv
     sample.xlsx
+    sample.json
     (例)・CSV読み込みテスト用　・Excelファイル操作テスト用　・JSONパーステスト用
