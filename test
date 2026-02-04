@@ -1,11 +1,21 @@
-Option Explicit
+============================================================
+[TEST] RunAllTests START  2026/02/04 16:02:52
+------------------------------------------------------------
+[TEST] Module: Mdl_Test_AppRuntime
+ - PASS  'vba.xlsm'!Mdl_Test_AppRuntime.Test_PerfEnterLeave_RestoreState
+ - PASS  'vba.xlsm'!Mdl_Test_AppRuntime.Test_TimeoutMs_AllowRangeEdges
+ - PASS  'vba.xlsm'!Mdl_Test_AppRuntime.Test_TimeoutMs_RejectNegative
+ - PASS  'vba.xlsm'!Mdl_Test_AppRuntime.Test_TimeoutMs_RejectOverMax
+ - PASS  'vba.xlsm'!Mdl_Test_AppRuntime.Test_TickTock_NonNegative
+ - PASS  'vba.xlsm'!Mdl_Test_AppRuntime.Test_Tock_MidnightWrap
+[TEST] Module: Mdl_Test_String
+ - PASS  'vba.xlsm'!Mdl_Test_String.Test_InStr_Contains
+ - PASS  'vba.xlsm'!Mdl_Test_String.Test_InStr_NotContains
+[TEST] Module: Mdl_Test_TimeoutSample
+  - SKIP (module not registered)
+------------------------------------------------------------
+[TEST] Total=9  Passed=8  Failed=0  Skipped=1
+[TEST] Elapsed=0.023 sec
+[TEST] RunAllTests END    2026/02/04 16:02:52
+============================================================
 
-Public Sub Test_InStr_Contains()
-    Dim s As String: s = "ABCDEF"
-    Mdl_Assert.AssertTrue InStr(1, s, "CD") > 0, "CDが含まれているべき"
-End Sub
-
-Public Sub Test_InStr_NotContains()
-    Dim s As String: s = "ABCDEF"
-    Mdl_Assert.AssertTrue InStr(1, s, "ZZ") > 0, "ZZは含まれないべき"
-End Sub
