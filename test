@@ -1,1 +1,134 @@
+Option Explicit
 
+'====================================================
+' Test Case Sheet (帳票) - 名前衝突しない安全版
+' 実行：VBL_TCS_CreateSheet_Run
+'====================================================
+Public Sub VBL_TCS_CreateSheet_Run()
+    VBL_TCS_CreateSheet "TestCases"
+End Sub
+
+Public Sub VBL_TCS_CreateSheet(Optional ByVal sheetName As String = "TestCases")
+    Dim wb As Workbook: Set wb = ThisWorkbook
+    Dim ws As Worksheet
+
+    If VBL_TCS_SheetExists(wb, sheetName) Then
+        If MsgBox("シート '" & sheetName & "' は既に存在します。削除して作り直しますか？", vbYesNo + vbQuestion) <> vbYes Then Exit Sub
+        Application.DisplayAlerts = False
+        wb.Worksheets(sheetName).Delete
+        Application.DisplayAlerts = True
+    End If
+
+    Set ws = wb.Worksheets.Add(After:=wb.Worksheets(wb.Worksheets.Count))
+    ws.Name = sheetName
+
+    With ws.Cells
+        .Font.Name = "Meiryo UI"
+        .Font.Size = 10
+    End With
+    ws.Rows.RowHeight = 18
+
+    Dim headers As Variant
+    headers = Array( _
+        "TC_ID", "対象", "観点", "優先度(P1/P2/P3)", "前提条件", "入力", "操作", _
+        "期待結果", "実結果", "判定(OK/NG)", "実行日", "担当", "証跡(ログ/スクショ/ファイル)", "備考" _
+    )
+
+    Dim lastCol As Long: lastCol = UBound(headers) + 1
+    Dim c As Long
+    For c = 1 To lastCol
+        ws.Cells(1, c).Value = headers(c - 1)
+    Next
+
+    Dim lo As ListObject
+    Set lo = ws.ListObjects.Add(xlSrcRange, ws.Range(ws.Cells(1, 1), ws.Cells(2, lastCol)), , xlYes)
+    lo.Name = "tbl_TestCases"
+    lo.TableStyle = "TableStyleMedium9"
+
+    With ws.Range(ws.Cells(1, 1), ws.Cells(1, lastCol))
+        .Font.Bold = True
+        .WrapText = True
+        .VerticalAlignment = xlVAlignCenter
+        .RowHeight = 30
+    End With
+
+    ws.Columns(1).ColumnWidth = 10
+    ws.Columns(2).ColumnWidth = 18
+    ws.Columns(3).ColumnWidth = 10
+    ws.Columns(4).ColumnWidth = 12
+    ws.Columns(5).ColumnWidth = 18
+    ws.Columns(6).ColumnWidth = 18
+    ws.Columns(7).ColumnWidth = 18
+    ws.Columns(8).ColumnWidth = 24
+    ws.Columns(9).ColumnWidth = 24
+    ws.Columns(10).ColumnWidth = 10
+    ws.Columns(11).ColumnWidth = 12
+    ws.Columns(12).ColumnWidth = 12
+    ws.Columns(13).ColumnWidth = 22
+    ws.Columns(14).ColumnWidth = 18
+
+    lo.DataBodyRange.WrapText = True
+    lo.DataBodyRange.VerticalAlignment = xlVAlignTop
+
+    ws.Activate
+    ws.Range("A2").Select
+    ActiveWindow.FreezePanes = True
+
+    VBL_TCS_ApplyListValidation lo.ListColumns("観点").DataBodyRange, "VAL,BND,FMT,IO,FLOW,ERR,CON,PERF,CFG"
+    VBL_TCS_ApplyListValidation lo.ListColumns("判定(OK/NG)").DataBodyRange, "OK,NG"
+    VBL_TCS_ApplyListValidation lo.ListColumns("優先度(P1/P2/P3)").DataBodyRange, "P1,P2,P3"
+
+    VBL_TCS_ApplyDateValidation lo.ListColumns("実行日").DataBodyRange
+    VBL_TCS_ApplyJudgeConditionalFormat lo.ListColumns("判定(OK/NG)").DataBodyRange
+
+    With ws.Range(ws.Cells(1, 1), ws.Cells(200, lastCol)).Borders
+        .LineStyle = xlContinuous
+        .Color = RGB(200, 200, 200)
+    End With
+
+    ws.Range("A1").Select
+End Sub
+
+'-------------------------
+' 以降は全部 Private（衝突しない）
+'-------------------------
+Private Function VBL_TCS_SheetExists(ByVal wb As Workbook, ByVal sheetName As String) As Boolean
+    On Error Resume Next
+    VBL_TCS_SheetExists = Not wb.Worksheets(sheetName) Is Nothing
+    On Error GoTo 0
+End Function
+
+Private Sub VBL_TCS_ApplyListValidation(ByVal target As Range, ByVal csv As String)
+    If target Is Nothing Then Exit Sub
+    On Error Resume Next
+    target.Validation.Delete
+    On Error GoTo 0
+    target.Validation.Add Type:=xlValidateList, AlertStyle:=xlValidAlertStop, Operator:=xlBetween, Formula1:=csv
+    target.Validation.InCellDropdown = True
+    target.Validation.IgnoreBlank = True
+End Sub
+
+Private Sub VBL_TCS_ApplyDateValidation(ByVal target As Range)
+    If target Is Nothing Then Exit Sub
+    On Error Resume Next
+    target.Validation.Delete
+    On Error GoTo 0
+    target.Validation.Add Type:=xlValidateDate, AlertStyle:=xlValidAlertStop, Operator:=xlBetween, _
+                          Formula1:="DATE(2000,1,1)", Formula2:="DATE(2099,12,31)"
+    target.NumberFormatLocal = "yyyy/mm/dd"
+End Sub
+
+Private Sub VBL_TCS_ApplyJudgeConditionalFormat(ByVal target As Range)
+    If target Is Nothing Then Exit Sub
+    target.FormatConditions.Delete
+
+    With target.FormatConditions.Add(Type:=xlCellValue, Operator:=xlEqual, Formula1:="=""OK""")
+        .Font.Bold = True
+        .Interior.Color = RGB(220, 255, 220)
+    End With
+
+    With target.FormatConditions.Add(Type:=xlCellValue, Operator:=xlEqual, Formula1:="=""NG""")
+        .Font.Bold = True
+        .Interior.Color = RGB(255, 220, 220)
+    End With
+End Sub
