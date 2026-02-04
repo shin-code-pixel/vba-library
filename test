@@ -87,7 +87,8 @@ Private Sub RunCase(ByVal procFullName As String, ByRef res As TTestResult)
 
     Err.Clear
     On Error Resume Next
-    Application.Run fullName
+    
+    CallByName Me, procFullName, VbMethod
     
     If Err.Number = 0 Then
         res.Passed = res.Passed + 1
