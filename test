@@ -1,2 +1,103 @@
-Err.Raise vbObjectError + 1001, "VBL_TimeoutMs", _
-                        "Timeout は　0～600000 の範囲で指定してください。"
+Mdl_Test_AppRuntime
+
+
+Option Explicit
+Option Private Module
+
+'========================
+' Tests for Mdl_AppRuntime
+'========================
+'・TimeoutMsは境界値（0/600000)と異常値（-1/600001)をテスト
+'・例外テストはAssertRaisesの都合上、例外を出すだけのラッパーSubを用意
+'・PerfEnter/Leaveは変更されたこと と 元に戻ること を両方確認
+
+Public Sub Test_PerfEnterLeave_RestoreState()
+    Dim st As Mdl_AppRuntime.T_AppState
+    Dim beforeSU As Boolean, beforeEE As Boolean, beforeDA As Boolean
+    Dim beforeCalc As XlCalculation
+
+    ' 現在状態を取得
+    beforeSU = Application.ScreenUpdating
+    beforeEE = Application.EnableEvents
+    beforeDA = Application.DisplayAlerts
+    beforeCalc = Application.Calculation
+
+    ' 高速化
+    Mdl_AppRuntime.VBL_PerfEnter st
+
+    ' 変更されていることを確認
+    Mdl_Assert.AssertEquals False, Application.ScreenUpdating, "ScreenUpdating should be False in PerfEnter"
+    Mdl_Assert.AssertEquals False, Application.EnableEvents, "EnableEvents should be False in PerfEnter"
+    Mdl_Assert.AssertEquals False, Application.DisplayAlerts, "DisplayAlerts should be False in PerfEnter"
+    Mdl_Assert.AssertEquals xlCalculationManual, Application.Calculation, "Calculation should be Manual in PerfEnter"
+
+    ' 復帰
+    Mdl_AppRuntime.VBL_PerfLeave st
+
+    ' 元に戻っていることを確認
+    Mdl_Assert.AssertEquals beforeSU, Application.ScreenUpdating, "ScreenUpdating should be restored"
+    Mdl_Assert.AssertEquals beforeEE, Application.EnableEvents, "EnableEvents should be restored"
+    Mdl_Assert.AssertEquals beforeDA, Application.DisplayAlerts, "DisplayAlerts should be restored"
+    Mdl_Assert.AssertEquals beforeCalc, Application.Calculation, "Calculation should be restored"
+End Sub
+
+
+Public Sub Test_TimeoutMs_AllowRangeEdges()
+    ' 下限 0
+    Mdl_AppRuntime.VBL_TimeoutMs = 0
+    Mdl_Assert.AssertEquals 0, Mdl_AppRuntime.VBL_TimeoutMs, "TimeoutMs should accept 0"
+
+    ' 上限 600000
+    Mdl_AppRuntime.VBL_TimeoutMs = 600000
+    Mdl_Assert.AssertEquals 600000, Mdl_AppRuntime.VBL_TimeoutMs, "TimeoutMs should accept 600000"
+End Sub
+
+
+Public Sub Test_TimeoutMs_RejectNegative()
+    ' Err.Raise は vbObjectError + 1001
+    Mdl_Assert.AssertRaises vbObjectError + 1001, "Mdl_Test_AppRuntime.Call_SetTimeout_Negative"
+End Sub
+
+Public Sub Call_SetTimeout_Negative()
+    Mdl_AppRuntime.VBL_TimeoutMs = -1
+End Sub
+
+
+Public Sub Test_TimeoutMs_RejectOverMax()
+    Mdl_Assert.AssertRaises vbObjectError + 1001, "Mdl_Test_AppRuntime._Call_SetTimeout_OverMax"
+End Sub
+
+Public Sub Call_SetTimeout_OverMax()
+    Mdl_AppRuntime.VBL_TimeoutMs = 600001
+End Sub
+
+
+Public Sub Test_TickTock_NonNegative()
+    Dim t0 As Double
+    t0 = Mdl_AppRuntime.VBL_Tick()
+
+    ' 少し待つ（Timerが進む程度でOK）
+    Dim i As Long
+    For i = 1 To 2000000
+        ' busy wait
+    Next
+
+    Dim dt As Double
+    dt = Mdl_AppRuntime.VBL_Tock(t0)
+
+    Mdl_Assert.AssertTrue dt >= 0, "Tock result should be non-negative"
+End Sub
+
+
+Public Sub Test_Tock_MidnightWrap()
+    ' 日付またぎ補正ロジックの直接テスト
+    ' t0 を「23:59:59付近」と仮定し、ti が小さい（リセット後）ケースを再現
+    Dim t0 As Double
+    t0 = 86399.9 ' 24h-0.1s
+
+    Dim dt As Double
+    dt = Mdl_AppRuntime.VBL_Tock(t0) ' 実際の Timer は小さい値の可能性がある
+
+    ' dt は「補正あり」または「補正なし」のどちらでも >=0 であるべき
+    Mdl_Assert.AssertTrue dt >= 0, "Tock should not be negative even across midnight"
+End Sub
