@@ -1,0 +1,163 @@
+Attribute VB_Name = "Mdl_FormValidator"
+Option Explicit
+
+'========================
+' 定義駆動：帳票一括バリデーション
+'========================
+
+' 種別（必ず種別が分かる接頭辞付き）
+Public Enum eVBL_FieldKind
+    eVBL_FieldKind_Number = 1
+    eVBL_FieldKind_Text = 2
+    eVBL_FieldKind_HalfWidthAlphaNum = 3
+    eVBL_FieldKind_Date = 4
+End Enum
+
+' 1項目ぶんの定義
+Public Type T_VBL_FieldDef
+    SheetName As String
+    Address As String
+    Label As String
+
+    Kind As eVBL_FieldKind
+    Required As Boolean
+
+    ' Number 用
+    MaxDigits As Long
+    MinValue As Double
+    MaxValue As Double
+
+    ' Text 用
+    CheckForbiddenChars As Boolean
+    CheckEnvDependentChars As Boolean
+
+    ' HalfWidthAlphaNum 用
+    NormalizeToHalfWidth As Boolean
+
+    ' Date 用
+    RejectWeekend As Boolean
+    UseHolidays As Boolean
+End Type
+
+'------------------------
+' 入口：定義配列を渡して一括検証
+' 戻り値："" = OK / それ以外 = エラー一覧（改行区切り）
+'------------------------
+Public Function VBL_ValidateByDefs( _
+    ByRef defs() As T_VBL_FieldDef, _
+    Optional ByVal holidays As Variant _
+) As String
+
+    Dim errs As String
+    Dim i As Long
+
+    For i = LBound(defs) To UBound(defs)
+        Dim msg As String
+        msg = VBL_ValidateOne(defs(i), holidays)
+
+        If Len(msg) > 0 Then
+            If Len(errs) > 0 Then errs = errs & vbCrLf
+            errs = errs & msg
+        End If
+    Next
+
+    VBL_ValidateByDefs = errs
+End Function
+
+'------------------------
+' 1項目の検証
+'------------------------
+Private Function VBL_ValidateOne(ByRef def As T_VBL_FieldDef, Optional ByVal holidays As Variant) As String
+    Dim ws As Worksheet
+    Set ws = ThisWorkbook.Worksheets(def.SheetName)
+
+    Dim rng As Range
+    Set rng = ws.Range(def.Address)
+
+    Dim v As Variant
+    v = rng.Value
+
+    Dim s As String
+    s = Trim$(CStr(v))
+
+    ' 必須
+    If def.Required Then
+        If Len(s) = 0 Then
+            VBL_ValidateOne = VBL_ErrLine(def, "未入力です。")
+            Exit Function
+        End If
+    Else
+        If Len(s) = 0 Then Exit Function
+    End If
+
+    ' 種別ごと
+    Select Case def.Kind
+
+        Case eVBL_FieldKind_Number
+            Dim nMsg As String
+            nMsg = VBL_ValidateNumber(v, def.MaxDigits, def.MinValue, def.MaxValue, Not def.Required)
+            If Len(nMsg) > 0 Then
+                VBL_ValidateOne = VBL_ErrLine(def, nMsg)
+                Exit Function
+            End If
+
+        Case eVBL_FieldKind_Text
+            If def.CheckForbiddenChars Then
+                Dim fMsg As String
+                fMsg = VBL_ValidateStringForbiddenChars(CStr(v), Not def.Required)
+                If Len(fMsg) > 0 Then
+                    VBL_ValidateOne = VBL_ErrLine(def, fMsg)
+                    Exit Function
+                End If
+            End If
+
+            If def.CheckEnvDependentChars Then
+                Dim eMsg As String
+                eMsg = VBL_ValidateStringEnvDependentChars(CStr(v))
+                If Len(eMsg) > 0 Then
+                    VBL_ValidateOne = VBL_ErrLine(def, eMsg)
+                    Exit Function
+                End If
+            End If
+
+        Case eVBL_FieldKind_HalfWidthAlphaNum
+            ' 正規化（全角→半角）
+            If def.NormalizeToHalfWidth Then
+                Dim normalized As String
+                normalized = VBL_NormalizeToHalfWidthAscii(CStr(v))
+                If normalized <> CStr(v) Then rng.Value = normalized
+                v = rng.Value
+            End If
+
+            Dim aMsg As String
+            aMsg = VBL_ValidateHalfWidthAlphaNumOnly(CStr(v), Not def.Required)
+            If Len(aMsg) > 0 Then
+                VBL_ValidateOne = VBL_ErrLine(def, aMsg)
+                Exit Function
+            End If
+
+        Case eVBL_FieldKind_Date
+            Dim dMsg As String
+            If def.UseHolidays Then
+                dMsg = VBL_ValidateDateBusinessDay(v, Not def.Required, def.RejectWeekend, holidays)
+            Else
+                dMsg = VBL_ValidateDateBusinessDay(v, Not def.Required, def.RejectWeekend)
+            End If
+
+            If Len(dMsg) > 0 Then
+                VBL_ValidateOne = VBL_ErrLine(def, dMsg)
+                Exit Function
+            End If
+
+        Case Else
+            VBL_ValidateOne = VBL_ErrLine(def, "定義Kindが不正です。")
+            Exit Function
+
+    End Select
+End Function
+
+Private Function VBL_ErrLine(ByRef def As T_VBL_FieldDef, ByVal reason As String) As String
+    ' 表示用： [シート!セル] ラベル: 理由
+    VBL_ErrLine = "[" & def.SheetName & "!" & def.Address & "] " & def.Label & ": " & reason
+End Function
+
