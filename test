@@ -1,4 +1,8 @@
-Public Sub Test_TimeoutMs_AllowRangeEdges()
-    ' 下限 0
-    Mdl_AppRuntime.VBL_TimeoutMs 0
-    Mdl_Assert.AssertEquals 0, Mdl_AppRuntime.VBL_TimeoutMs, "TimeoutMs should accept 0"
+Public Sub VBL_TimeoutMs(ByVal v As Long)
+    '10分まで待機可能。それ以降はエラー
+    If v < 0 Or v > 600000 Then
+        Err.Raise vbObjectError + 1001, "VBL_TimeoutMs", _
+                        "Timeout は　0～600000 の範囲で指定してください。"
+    End If
+    mTimeoutMs = v
+End Sub
