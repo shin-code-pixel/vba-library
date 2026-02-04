@@ -10,8 +10,8 @@ Public Sub Test_Timeout_Sample()
         Application.Wait Now + TimeValue("0:00:01")
         frmProgress.SetProgress i / maxN
 
-        VBL_TimeoutMs = 30000    '‘Ò‹@ŠÔİ’è
+        VBL_TimeoutMs = 30000    'â€˜Ã’â€¹@Å½Å¾Å Ã”ÂÃâ€™Ã¨
     Next i
    
-    Mdl_Assert.AssertTrue True, "ƒTƒ“ƒvƒ‹"
+    Mdl_Assert.AssertTrue True, "Æ’TÆ’â€œÆ’vÆ’â€¹"
 End Sub
