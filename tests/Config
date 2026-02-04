@@ -16,6 +16,17 @@ tests/
       ▸[Sub]RunCase
     
     『Mdl_Assert.bas』     "断言ライブラリ"      [期待値チェック専門]
+    　▸[Sub]AssertTrue
+    　▸[Sub]AssertFalse
+    　▸[Sub]AssertEquals
+    　▸[Sub]AssertNotEquals
+    　▸[Sub]AssertNotNothing
+    　▸[Sub]AssertContains
+    　▸[Sub]AssertRaises
+    　▸[Function]VariantEquals
+    　▸[Function]ToDebugText
+    　▸[Function]NzMsg
+
     『Mdl_TestUtil.bas』   "ログ出力などを共通補助"
 
   cases/   ※本体モジュールごとに、必ずテストモジュールが存在する
