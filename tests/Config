@@ -1,15 +1,15 @@
-tests/
-
-  src/  ※本体モジュール
+src/  ※本体モジュール
     『Mdl_AppRuntime.bas』
     『Mdl_String.bas』
     『Mdl_File.bas』
     『...』
 
+tests/
   harness/  ※「テストのための共通部品」だけを置く（本体モジュールは置かない）
 
     『Mdl_TestRunner.bas』 "テスト実行エンジン"  [全部のテストを一括実行]
-      ▸[Sub]RunAllTests
+
+      ▸[Sub]RunAllTests  "登録テスト一覧"
           →　Mdl_Test_* を順番に実行　→　Assert で合否判定
 
       ▸[Sub]RunTestModule
@@ -25,7 +25,6 @@ tests/
     『Mdl_Test_File.bas』    "ファイル系"  [パス操作・存在チェック等]
     『Mdl_Test_Json.bas』
     『Mdl_Test_Timeout_Sample.bas』
-    『Mdl_TestRunner.bas』
 
   fixtures/  "入力サンプル固定"
     sample.csv
