@@ -1,8 +1,4 @@
-Mdl_Test_AppRuntime
-
-
 Option Explicit
-Option Private Module
 
 '========================
 ' Tests for Mdl_AppRuntime
