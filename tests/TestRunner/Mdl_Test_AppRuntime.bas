@@ -4,34 +4,34 @@ Option Explicit
 '========================
 ' Tests for Mdl_AppRuntime
 '========================
-'ETimeoutMs‚Í‹«ŠE’li0/600000)‚ÆˆÙí’li-1/600001)‚ðƒeƒXƒg
-'E—áŠOƒeƒXƒg‚ÍAssertRaises‚Ì“s‡ãA—áŠO‚ðo‚·‚¾‚¯‚Ìƒ‰ƒbƒp[Sub‚ð—pˆÓ
-'EPerfEnter/Leave‚Í•ÏX‚³‚ê‚½‚±‚Æ ‚Æ Œ³‚É–ß‚é‚±‚Æ ‚ð—¼•ûŠm”F
+'ãƒ»TimeoutMsã¯å¢ƒç•Œå€¤ï¼ˆ0/600000)ã¨ç•°å¸¸å€¤ï¼ˆ-1/600001)ã‚’ãƒ†ã‚¹ãƒˆ
+'ãƒ»ä¾‹å¤–ãƒ†ã‚¹ãƒˆã¯AssertRaisesã®éƒ½åˆä¸Šã€ä¾‹å¤–ã‚’å‡ºã™ã ã‘ã®ãƒ©ãƒƒãƒ‘ãƒ¼Subã‚’ç”¨æ„
+'ãƒ»PerfEnter/Leaveã¯å¤‰æ›´ã•ã‚ŒãŸã“ã¨ ã¨ å…ƒã«æˆ»ã‚‹ã“ã¨ ã‚’ä¸¡æ–¹ç¢ºèª
 
 Public Sub Test_PerfEnterLeave_RestoreState()
     Dim st As Mdl_AppRuntime.T_AppState
     Dim beforeSU As Boolean, beforeEE As Boolean, beforeDA As Boolean
     Dim beforeCalc As XlCalculation
 
-    ' Œ»Ýó‘Ô‚ðŽæ“¾
+    ' ç¾åœ¨çŠ¶æ…‹ã‚’å–å¾—
     beforeSU = Application.ScreenUpdating
     beforeEE = Application.EnableEvents
     beforeDA = Application.DisplayAlerts
     beforeCalc = Application.Calculation
 
-    ' ‚‘¬‰»
+    ' é«˜é€ŸåŒ–
     Mdl_AppRuntime.VBL_PerfEnter st
 
-    ' •ÏX‚³‚ê‚Ä‚¢‚é‚±‚Æ‚ðŠm”F
+    ' å¤‰æ›´ã•ã‚Œã¦ã„ã‚‹ã“ã¨ã‚’ç¢ºèª
     Mdl_Assert.AssertEquals False, Application.ScreenUpdating, "ScreenUpdating should be False in PerfEnter"
     Mdl_Assert.AssertEquals False, Application.EnableEvents, "EnableEvents should be False in PerfEnter"
     Mdl_Assert.AssertEquals False, Application.DisplayAlerts, "DisplayAlerts should be False in PerfEnter"
     Mdl_Assert.AssertEquals xlCalculationManual, Application.Calculation, "Calculation should be Manual in PerfEnter"
 
-    ' •œ‹A
+    ' å¾©å¸°
     Mdl_AppRuntime.VBL_PerfLeave st
 
-    ' Œ³‚É–ß‚Á‚Ä‚¢‚é‚±‚Æ‚ðŠm”F
+    ' å…ƒã«æˆ»ã£ã¦ã„ã‚‹ã“ã¨ã‚’ç¢ºèª
     Mdl_Assert.AssertEquals beforeSU, Application.ScreenUpdating, "ScreenUpdating should be restored"
     Mdl_Assert.AssertEquals beforeEE, Application.EnableEvents, "EnableEvents should be restored"
     Mdl_Assert.AssertEquals beforeDA, Application.DisplayAlerts, "DisplayAlerts should be restored"
@@ -40,18 +40,18 @@ End Sub
 
 
 Public Sub Test_TimeoutMs_AllowRangeEdges()
-    ' ‰ºŒÀ 0
+    ' ä¸‹é™ 0
     Mdl_AppRuntime.VBL_TimeoutMs (0)
     Mdl_Assert.AssertEquals (0), Mdl_AppRuntime.VBL_GetTimeoutMs, "TimeoutMs should accept 0"
 
-    ' ãŒÀ 600000
+    ' ä¸Šé™ 600000
     Mdl_AppRuntime.VBL_TimeoutMs (600000)
     Mdl_Assert.AssertEquals (600000), Mdl_AppRuntime.VBL_GetTimeoutMs, "TimeoutMs should accept 600000"
 End Sub
 
 
 Public Sub Test_TimeoutMs_RejectNegative()
-    ' Err.Raise ‚Í vbObjectError + 1001
+    ' Err.Raise ã¯ vbObjectError + 1001
 '    Mdl_Assert.AssertRaises vbObjectError + 1001, "Mdl_Test_AppRuntime.Call_SetTimeout_Negative"
 End Sub
 
@@ -73,7 +73,7 @@ Public Sub Test_TickTock_NonNegative()
     Dim t0 As Double
     t0 = Mdl_AppRuntime.VBL_Tick()
 
-    ' ­‚µ‘Ò‚ÂiTimer‚ªi‚Þ’ö“x‚ÅOKj
+    ' å°‘ã—å¾…ã¤ï¼ˆTimerãŒé€²ã‚€ç¨‹åº¦ã§OKï¼‰
     Dim i As Long
     For i = 1 To 2000000
         ' busy wait
@@ -87,14 +87,14 @@ End Sub
 
 
 Public Sub Test_Tock_MidnightWrap()
-    ' “ú•t‚Ü‚½‚¬•â³ƒƒWƒbƒN‚Ì’¼ÚƒeƒXƒg
-    ' t0 ‚ðu23:59:59•t‹ßv‚Æ‰¼’è‚µAti ‚ª¬‚³‚¢iƒŠƒZƒbƒgŒãjƒP[ƒX‚ðÄŒ»
+    ' æ—¥ä»˜ã¾ãŸãŽè£œæ­£ãƒ­ã‚¸ãƒƒã‚¯ã®ç›´æŽ¥ãƒ†ã‚¹ãƒˆ
+    ' t0 ã‚’ã€Œ23:59:59ä»˜è¿‘ã€ã¨ä»®å®šã—ã€ti ãŒå°ã•ã„ï¼ˆãƒªã‚»ãƒƒãƒˆå¾Œï¼‰ã‚±ãƒ¼ã‚¹ã‚’å†ç¾
     Dim t0 As Double
     t0 = 86399.9 ' 24h-0.1s
 
     Dim dt As Double
-    dt = Mdl_AppRuntime.VBL_Tock(t0) ' ŽÀÛ‚Ì Timer ‚Í¬‚³‚¢’l‚Ì‰Â”\«‚ª‚ ‚é
+    dt = Mdl_AppRuntime.VBL_Tock(t0) ' å®Ÿéš›ã® Timer ã¯å°ã•ã„å€¤ã®å¯èƒ½æ€§ãŒã‚ã‚‹
 
-    ' dt ‚Íu•â³‚ ‚èv‚Ü‚½‚Íu•â³‚È‚µv‚Ì‚Ç‚¿‚ç‚Å‚à >=0 ‚Å‚ ‚é‚×‚«
+    ' dt ã¯ã€Œè£œæ­£ã‚ã‚Šã€ã¾ãŸã¯ã€Œè£œæ­£ãªã—ã€ã®ã©ã¡ã‚‰ã§ã‚‚ >=0 ã§ã‚ã‚‹ã¹ã
     Mdl_Assert.AssertTrue dt >= 0, "Tock should not be negative even across midnight"
 End Sub
