@@ -1,34 +1,21 @@
-Private Sub RunCase(ByVal procFullName As String, ByRef res As TTestResult)
-    res.Total = res.Total + 1
-
-    Dim fullName As String
-    fullName = "'" & ThisWorkbook.Name & "'!" & procFullName
-
-    Mdl_TestState.VBL_TestCaseReset
-
-    Err.Clear
-    On Error Resume Next
-    Application.Run fullName
-
-    ' テスト本体が落ちた（予期せぬ実行時エラー）
-    If Err.Number <> 0 Then
-        res.Failed = res.Failed + 1
-        Debug.Print " - FAIL  " & fullName
-        Debug.Print "        Err=" & Err.Number & " " & Err.Description
-        Err.Clear
-        On Error GoTo 0
-        Exit Sub
-    End If
-
-    ' Assertで失敗した
-    If Mdl_TestState.gCaseFailed Then
-        res.Failed = res.Failed + 1
-        Debug.Print " - FAIL  " & fullName
-        Debug.Print "        " & Mdl_TestState.gCaseFailMsg
-    Else
-        res.Passed = res.Passed + 1
-        Debug.Print " - PASS  " & fullName
-    End If
-
-    On Error GoTo 0
-End Sub
+============================================================
+[TEST] RunAllTests START  2026/02/04 15:59:11
+------------------------------------------------------------
+[TEST] Module: Mdl_Test_AppRuntime
+ - PASS  'vba.xlsm'!Mdl_Test_AppRuntime.Test_PerfEnterLeave_RestoreState
+ - PASS  'vba.xlsm'!Mdl_Test_AppRuntime.Test_TimeoutMs_AllowRangeEdges
+ - PASS  'vba.xlsm'!Mdl_Test_AppRuntime.Test_TimeoutMs_RejectNegative
+ - PASS  'vba.xlsm'!Mdl_Test_AppRuntime.Test_TimeoutMs_RejectOverMax
+ - PASS  'vba.xlsm'!Mdl_Test_AppRuntime.Test_TickTock_NonNegative
+ - PASS  'vba.xlsm'!Mdl_Test_AppRuntime.Test_Tock_MidnightWrap
+[TEST] Module: Mdl_Test_String
+ - PASS  'vba.xlsm'!Mdl_Test_String.Test_InStr_Contains
+ - FAIL  'vba.xlsm'!Mdl_Test_String.Test_InStr_NotContains
+        ZZは含まれないべき
+[TEST] Module: Mdl_Test_TimeoutSample
+  - SKIP (module not registered)
+------------------------------------------------------------
+[TEST] Total=9  Passed=7  Failed=1  Skipped=1
+[TEST] Elapsed=0.027 sec
+[TEST] RunAllTests END    2026/02/04 15:59:11
+============================================================
