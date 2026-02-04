@@ -1,6 +1,6 @@
 目的：帳票生成（画面→生成→保存/印刷）で、抜けやすい不具合を網羅的に潰すための共通チェックリスト。
 ---
-## A. Input Data (VAL/BND)
+## A. Input Data [VAL(Validation:入力検証)/BND(Boundary:境界値)]
 
 - [ ] 必須項目：空（必須未入力のとき、適切にエラー/案内になる）
 - [ ] 境界値：最小値 / 最大値（許容範囲の上下限）
@@ -13,7 +13,7 @@
 
 ---
 
-## B. Layout / Formatting (FMT)
+## B. Layout / Formatting [FMT(Format/Formatting:書式・表示形式)]
 
 - [ ] 罫線：範囲・太さ・欠けが崩れない
 - [ ] フォント：種類/サイズ/太字/色が仕様通り
@@ -28,7 +28,7 @@
 
 ---
 
-## C. Output / Export (IO)
+## C. Output / Export [I(Input)O(Output):入出力]
 
 - [ ] 新規保存：指定フォルダに保存できる
 - [ ] 上書き：同名ファイル存在時の挙動（確認/自動リネーム）が仕様通り
@@ -41,7 +41,7 @@
 
 ---
 
-## D. Process Flow (FLOW)
+## D. Process Flow (FLOW:業務フロー)
 
 - [ ] テンプレ読込：テンプレ不在/破損時に適切に停止し案内する
 - [ ] シート生成：同名シートが存在する場合の挙動が仕様通り
@@ -51,7 +51,7 @@
 
 ---
 
-## E. Error Handling / Logging (ERR)
+## E. Error Handling / Logging [ERR(Error Handling:エラー処理)]
 
 - [ ] 入力不備：どの項目が原因か、ユーザーが直せる説明になっている
 - [ ] 例外：Err.Number/Description/手順が最低限ログに残る
@@ -60,7 +60,7 @@
 
 ---
 
-## F. Environment / Operations (CFG/CON)
+## F. Environment / Operations [CFG(Configuration:設定)/CON(Condition/Constraint:条件・制約)]
 
 - [ ] Excel差分：365/2019 等で動作が破綻しない
 - [ ] マクロ無効：無効時に最低限の案内が出る（必要なら）
@@ -70,7 +70,7 @@
 
 ---
 
-## G. Performance (PERF)
+## G. Performance [PERF(Performance:性能)]
 
 - [ ] 件数増：データ増加（例：100/1000件）でも許容時間内
 - [ ] 高速化：画面更新OFF等の効果が出ている
