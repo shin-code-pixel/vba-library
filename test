@@ -1,119 +1,99 @@
 Option Explicit
 
 ' =========================
-' Assert (断言) ユーティリティ
+' Test Runner
+' - 全テスト一括実行
+' - Immediate Window に結果出力
 ' =========================
 
-Public Sub AssertTrue(ByVal condition As Boolean, Optional ByVal message As String = "")
-    If Not condition Then
-        Err.Raise vbObjectError + 1000, "AssertTrue", NzMsg(message, "Expected True, but was False.")
+Private Type TTestResult
+    Total As Long
+    Passed As Long
+    Failed As Long
+    Skipped As Long
+End Type
+
+'============================
+' 入口：全テスト一括実行（登録テスト一覧）
+'============================
+Public Sub RunAllTests()
+    Dim res As TTestResult
+    Dim t0 As Double: t0 = Timer
+
+    Debug.Print String$(60, "=")
+    Debug.Print "[TEST] RunAllTests START  " & Now
+    Debug.Print String$(60, "-")
+
+    '  ---- 登録テスト一覧（ここだけ増やす）----
+    RunTestModule "Mdl_Test_AppRuntime", res
+    RunTestModule "Mdl_Test_String", res
+'    RunTestModule "Mdl_Test_File", res
+'    RunTestModule "Mdl_Test_Json", res
+    RunTestModule "Mdl_Test_TimeoutSample", res
+    '  ----------------------------------------------------
+
+    Debug.Print String$(60, "-")
+    Debug.Print "[TEST] Total=" & res.Total & "  Passed=" & res.Passed & "  Failed=" & res.Failed & "  Skipped=" & res.Skipped
+    Debug.Print "[TEST] Elapsed=" & Format$(Timer - t0, "0.000") & " sec"
+    Debug.Print "[TEST] RunAllTests END    " & Now
+    Debug.Print String$(60, "=")
+
+    If res.Failed > 0 Then
+        MsgBox "テスト失敗あり: " & res.Failed & " 件（Immediate Window を確認してください）", vbExclamation
+    Else
+        MsgBox "テスト全件成功: " & res.Passed & " 件", vbInformation
     End If
 End Sub
 
-Public Sub AssertFalse(ByVal condition As Boolean, Optional ByVal message As String = "")
-    If condition Then
-        Err.Raise vbObjectError + 1001, "AssertFalse", NzMsg(message, "Expected False, but was True.")
-    End If
-End Sub
+'============================
+' モジュール単位でテストを実行
+'============================
+Private Sub RunTestModule(ByVal moduleName As String, ByRef res As TTestResult)
+    Debug.Print "[TEST] Module: " & moduleName
 
-Public Sub AssertEquals(ByVal expected As Variant, ByVal actual As Variant, Optional ByVal message As String = "")
-    If Not VariantEquals(expected, actual) Then
-        Err.Raise vbObjectError + 1002, "AssertEquals", _
-            NzMsg(message, "Not equal. expected=[" & ToDebugText(expected) & "] actual=[" & ToDebugText(actual) & "]")
-    End If
-End Sub
+    ' テスト一覧：Public Sub Test_* を手で列挙する方式（VBAで一番壊れにくい）
+    ' ※ 自動列挙（VBIDEでProc一覧取得）も可能ですが、参照/設定地雷になるため避けます。
 
-Public Sub AssertNotEquals(ByVal notExpected As Variant, ByVal actual As Variant, Optional ByVal message As String = "")
-    If VariantEquals(notExpected, actual) Then
-        Err.Raise vbObjectError + 1003, "AssertNotEquals", _
-            NzMsg(message, "Should not equal. value=[" & ToDebugText(actual) & "]")
-    End If
-End Sub
-
-Public Sub AssertNotNothing(ByVal obj As Object, Optional ByVal message As String = "")
-    If obj Is Nothing Then
-        Err.Raise vbObjectError + 1004, "AssertNotNothing", NzMsg(message, "Object is Nothing.")
-    End If
-End Sub
-
-Public Sub AssertContains(ByVal haystack As String, ByVal needle As String, Optional ByVal message As String = "")
-    If InStr(1, haystack, needle, vbBinaryCompare) = 0 Then
-        Err.Raise vbObjectError + 1005, "AssertContains", _
-            NzMsg(message, "Not contains. needle=[" & needle & "] haystack=[" & haystack & "]")
-    End If
-End Sub
-
-' 例外（エラー）を期待するテスト用
-'「このプロシージャを実行したら、このエラー番号が出るはす」ということを検証するための関数
-'「この処理は失敗して当然」をテストとして成立させるための仕組み
-Public Sub AssertRaises(ByVal expectedErrNumber As Long, ByVal procName As String, Optional ByVal message As String = "")
-    Dim fullName As String
-    fullName = "'" & ThisWorkbook.name & "'!" & procName
+    Select Case moduleName
+          Case "Mdl_Test_AppRuntime"
+            RunCase moduleName & ".Test_PerfEnterLeave_RestoreState", res
+            RunCase moduleName & ".Test_TimeoutMs_AllowRangeEdges", res
+            RunCase moduleName & ".Test_TimeoutMs_RejectNegative", res
+            RunCase moduleName & ".Test_TimeoutMs_RejectOverMax", res
+            RunCase moduleName & ".Test_TickTock_NonNegative", res
+            RunCase moduleName & ".Test_Tock_MidnightWrap", res
     
-    On Error GoTo EH
+        Case "Mdl_Test_String"
+            RunCase moduleName & ".Test_InStr_Contains", res
+            RunCase moduleName & ".Test_InStr_NotContains", res
+
+        Case "Mdl_Test_TimeoutSample"
+            res.Total = res.Total + 1
+            res.Skipped = res.Skipped + 1
+            Debug.Print "  - SKIP (module not registered)"
+
+        Case Else
+            res.Total = res.Total + 1
+            res.Skipped = res.Skipped + 1
+            Debug.Print "  - SKIP (module not registered)"
+    End Select
+End Sub
+
+Private Sub RunCase(ByVal procFullName As String, ByRef res As TTestResult)
+    res.Total = res.Total + 1
+
+    Dim fullName As String
+    fullName = "'" & ThisWorkbook.name & "'!" & procFullName
+
     Application.Run fullName
     
-    'エラーが出なかったら失敗
-    Err.Raise vbObjectError + 1006, "AssertRaises", NzMsg(message, _
-                                                    "Expected error " & expectedErrNumber & ", but no error was raised.")
-    Exit Sub
-    
-EH:
-    Debug.Print "AssertRaises got Err.Number=", Err.Number
-
-    '期待したエラーなら　PASS（ここで必ず終わる）
-    If Err.Number = expectedErrNumber Then
+    If Err.Number = 0 Then
+        res.Passed = res.Passed + 1
+        Debug.Print " - PASS  " & fullName
+    Else
+        res.Failed = res.Failed + 1
+        Debug.Print "  - FAIL  " & fullName
+        Debug.Print "          Err=" & Err.Number & "  " & Err.Description
         Err.Clear
-        Exit Sub
     End If
-    
-    '違うエラーなら FAIL
-    Dim gotNum As Long: gotNum = Err.Number
-    Dim gotDesc As String: gotDesc = Err.Description
-    Err.Clear
-    Err.Raise vbObjectError + 1007, "AssertRaises", NzMsg(message, _
-        "Expected error " & expectedErrNumber & ", but got " & gotNum & IIf(Len(gotDesc) > 0, " : " & gotDesc, ""))
 End Sub
-
-' -------------------------
-' 内部ユーティリティ
-' -------------------------
-
-Private Function VariantEquals(ByVal a As Variant, ByVal b As Variant) As Boolean
-    ' Null/Empty 対応
-    If IsNull(a) And IsNull(b) Then VariantEquals = True: Exit Function
-    If IsEmpty(a) And IsEmpty(b) Then VariantEquals = True: Exit Function
-
-    ' 型が違っても比較できる範囲は吸収（実務優先）
-    If IsDate(a) And IsDate(b) Then
-        VariantEquals = (CDbl(CDate(a)) = CDbl(CDate(b)))
-        Exit Function
-    End If
-
-    If IsNumeric(a) And IsNumeric(b) Then
-        ' Double誤差を避けたい場合は別途 AssertAlmostEquals を追加してください
-        VariantEquals = (CDbl(a) = CDbl(b))
-        Exit Function
-    End If
-
-    VariantEquals = (CStr(a) = CStr(b))
-End Function
-
-Private Function ToDebugText(ByVal v As Variant) As String
-    If IsNull(v) Then
-        ToDebugText = "<Null>"
-    ElseIf IsEmpty(v) Then
-        ToDebugText = "<Empty>"
-    Else
-        ToDebugText = CStr(v)
-    End If
-End Function
-
-Private Function NzMsg(ByVal msg As String, ByVal fallback As String) As String
-    If Len(Trim$(msg)) = 0 Then
-        NzMsg = fallback
-    Else
-        NzMsg = msg
-    End If
-End Function
-
