@@ -1,6 +1,2 @@
-============================================================
-[TEST] RunAllTests START  2026/02/04 14:54:35
-------------------------------------------------------------
-[TEST] Module: Mdl_Test_AppRuntime
- - PASS  'vba.xlsm'!Mdl_Test_AppRuntime.Test_PerfEnterLeave_RestoreState
- - PASS  'vba.xlsm'!Mdl_Test_AppRuntime.Test_TimeoutMs_AllowRangeEdges
+Err.Raise vbObjectError + 1001, "VBL_TimeoutMs", _
+                        "Timeout は　0～600000 の範囲で指定してください。"
