@@ -1,0 +1,228 @@
+Attribute VB_Name = "Mdl_ValidateField"
+Option Explicit
+
+'========================
+' 汎用：単項目チェック（業務帳票向け）
+'========================
+
+'--------- 数値 ---------
+
+' 数値型・桁数・範囲（整数/小数どちらも可）
+' 戻り値："" = OK / エラーメッセージ = NG
+Public Function VBL_ValidateNumber( _
+    ByVal v As Variant, _
+    Optional ByVal maxDigits As Long = 0, _
+    Optional ByVal minValue As Double = 0, _
+    Optional ByVal maxValue As Double = 0, _
+    Optional ByVal allowBlank As Boolean = False _
+) As String
+
+    Dim s As String
+    s = Trim$(CStr(v))
+
+    If Len(s) = 0 Then
+        If allowBlank Then Exit Function
+        VBL_ValidateNumber = "未入力です。"
+        Exit Function
+    End If
+
+    If Not IsNumeric(s) Then
+        VBL_ValidateNumber = "数値ではありません。"
+        Exit Function
+    End If
+
+    Dim d As Double
+    d = CDbl(s)
+
+    ' 桁数（符号/小数点は除外してカウント）
+    If maxDigits > 0 Then
+        Dim digits As Long
+        digits = VBL_CountDigits(s)
+        If digits > maxDigits Then
+            VBL_ValidateNumber = "桁数超過です。（最大 " & maxDigits & " 桁）"
+            Exit Function
+        End If
+    End If
+
+    ' 範囲（min/max が両方 0 の場合は範囲チェックしない設計）
+    If Not (minValue = 0 And maxValue = 0) Then
+        If d < minValue Or d > maxValue Then
+            VBL_ValidateNumber = "範囲外です。（" & minValue & " ～ " & maxValue & "）"
+            Exit Function
+        End If
+    End If
+End Function
+
+Private Function VBL_CountDigits(ByVal s As String) As Long
+    Dim i As Long, ch As String, c As Long
+    For i = 1 To Len(s)
+        ch = Mid$(s, i, 1)
+        If ch >= "0" And ch <= "9" Then c = c + 1
+    Next
+    VBL_CountDigits = c
+End Function
+
+
+'--------- 文字列 ---------
+
+' 禁止文字（Windowsファイル名系）＋制御文字の検知
+Public Function VBL_ValidateStringForbiddenChars( _
+    ByVal s As String, _
+    Optional ByVal allowBlank As Boolean = True _
+) As String
+
+    If Len(s) = 0 Then
+        If allowBlank Then Exit Function
+        VBL_ValidateStringForbiddenChars = "未入力です。"
+        Exit Function
+    End If
+
+    Dim bad As String
+    bad = "\/:*?""<>|"
+
+    Dim i As Long, ch As String, code As Long
+    For i = 1 To Len(s)
+        ch = Mid$(s, i, 1)
+
+        ' 制御文字（改行・タブ等も含む）
+        code = AscW(ch)
+        If code >= 0 And code < 32 Then
+            VBL_ValidateStringForbiddenChars = "制御文字が含まれています。"
+            Exit Function
+        End If
+
+        If InStr(1, bad, ch, vbBinaryCompare) > 0 Then
+            VBL_ValidateStringForbiddenChars = "禁止文字が含まれています。（" & ch & "）"
+            Exit Function
+        End If
+    Next
+End Function
+
+' 環境依存文字（厳密判定は困難なので、実務で事故りやすい範囲を検知する簡易版）
+' - 私用領域（Private Use Area）
+' - サロゲート（絵文字等の可能性）
+' - 代表的な丸数字など（必要なら追加）
+Public Function VBL_ValidateStringEnvDependentChars( _
+    ByVal s As String _
+) As String
+
+    Dim i As Long, ch As String, code As Long
+    For i = 1 To Len(s)
+        ch = Mid$(s, i, 1)
+        code = AscW(ch)
+
+        ' 私用領域（フォント依存で化けやすい）
+        If code >= &HE000 And code <= &HF8FF Then
+            VBL_ValidateStringEnvDependentChars = "環境依存文字の可能性があります。（私用領域）"
+            Exit Function
+        End If
+
+        ' サロゲート（絵文字など）
+        If code >= &HD800 And code <= &HDFFF Then
+            VBL_ValidateStringEnvDependentChars = "環境依存文字の可能性があります。（サロゲート）"
+            Exit Function
+        End If
+    Next
+
+    ' 代表例（丸数字など：必要に応じて増やしてください）
+    If InStr(s, "①") > 0 Or InStr(s, "②") > 0 Or InStr(s, "③") > 0 Then
+        VBL_ValidateStringEnvDependentChars = "環境依存文字の可能性があります。（丸数字）"
+        Exit Function
+    End If
+End Function
+
+
+'--------- 半角英数（正規化） ---------
+
+' 全角英数→半角英数へ（Excel関数ASCを使用）
+' ※ 記号やカタカナを含めた統一もしたい場合は、用途に応じて拡張してください。
+Public Function VBL_NormalizeToHalfWidthAscii(ByVal s As String) As String
+    If Len(s) = 0 Then
+        VBL_NormalizeToHalfWidthAscii = s
+        Exit Function
+    End If
+    VBL_NormalizeToHalfWidthAscii = Application.WorksheetFunction.Asc(s)
+End Function
+
+' 半角英数のみ許可（スペース許可などは用途により追加）
+Public Function VBL_ValidateHalfWidthAlphaNumOnly(ByVal s As String, Optional ByVal allowBlank As Boolean = True) As String
+    If Len(s) = 0 Then
+        If allowBlank Then Exit Function
+        VBL_ValidateHalfWidthAlphaNumOnly = "未入力です。"
+        Exit Function
+    End If
+
+    Dim i As Long, ch As String
+    For i = 1 To Len(s)
+        ch = Mid$(s, i, 1)
+        If Not ((ch >= "0" And ch <= "9") Or (ch >= "A" And ch <= "Z") Or (ch >= "a" And ch <= "z")) Then
+            VBL_ValidateHalfWidthAlphaNumOnly = "半角英数字以外が含まれています。（" & ch & "）"
+            Exit Function
+        End If
+    Next
+End Function
+
+
+'--------- 日付 ---------
+
+' 日付型・土日祝チェック
+' holidays: Date の配列（Variant配列でもOK）を渡す。不要なら省略。
+Public Function VBL_ValidateDateBusinessDay( _
+    ByVal v As Variant, _
+    Optional ByVal allowBlank As Boolean = False, _
+    Optional ByVal rejectWeekend As Boolean = True, _
+    Optional ByVal holidays As Variant _
+) As String
+
+    Dim s As String
+    s = Trim$(CStr(v))
+
+    If Len(s) = 0 Then
+        If allowBlank Then Exit Function
+        VBL_ValidateDateBusinessDay = "未入力です。"
+        Exit Function
+    End If
+
+    If Not IsDate(s) Then
+        VBL_ValidateDateBusinessDay = "日付ではありません。"
+        Exit Function
+    End If
+
+    Dim dt As Date
+    dt = CDate(s)
+
+    If rejectWeekend Then
+        Dim wd As Long
+        wd = Weekday(dt, vbMonday) '月=1 … 日=7
+        If wd = 6 Or wd = 7 Then
+            VBL_ValidateDateBusinessDay = "土日です。"
+            Exit Function
+        End If
+    End If
+
+    If Not IsMissing(holidays) Then
+        If VBL_IsHoliday(dt, holidays) Then
+            VBL_ValidateDateBusinessDay = "祝日です。"
+            Exit Function
+        End If
+    End If
+End Function
+
+Private Function VBL_IsHoliday(ByVal dt As Date, ByVal holidays As Variant) As Boolean
+    On Error GoTo EH
+
+    Dim i As Long
+    ' holidays は Date配列 or Variant配列を想定
+    For i = LBound(holidays) To UBound(holidays)
+        If DateValue(holidays(i)) = DateValue(dt) Then
+            VBL_IsHoliday = True
+            Exit Function
+        End If
+    Next
+    Exit Function
+
+EH:
+    ' 形式が違う等でも落とさない（呼び出し側で管理）
+    VBL_IsHoliday = False
+End Function
+
