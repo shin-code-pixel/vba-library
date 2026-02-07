@@ -2,54 +2,37 @@ Attribute VB_Name = "Mdl00_Initialization"
 Option Explicit
 Option Private Module
 
-'------------------------------------------------------------------------------
-'¡ƒGƒfƒBƒ^[Ý’è
-'ƒtƒHƒ“ƒg–¼:ƒƒCƒŠƒIi“ú–{Œêj
-'ƒTƒCƒYF9
-'ƒCƒ“ƒWƒP[ƒ^[ƒo[FON
-'•W€ƒR[ƒh     @F‘OŒi(”’)@E”wŒi(•)
-'‘I‘ð‚³‚ê‚½•¶Žš  F‘OŒi(Ž©“®)E”wŒi(Â)
-'\•¶ƒGƒ‰[•¶Žš  F‘OŒi(Ô)@E”wŒi(”’)
-'ŽŸƒXƒe[ƒgƒƒ“ƒgF‘OŒi(Ž©“®)E”wŒi(‰©F)
-'ƒuƒŒ[ƒNƒ|ƒCƒ“ƒgF‘OŒi(”’)@E”wŒi(’ƒF)
-'ƒRƒƒ“ƒg@@@@F‘OŒi(‰©—Î)E”wŒi(•)
-'ƒL[ƒ[ƒh@@@F‘OŒi(…F)E”wŒi(•)
-'Ž¯•ÊŽq@@@@@F‘OŒi(‰©F)E”wŒi(•)
-'ƒuƒbƒNƒ}[ƒN@@F‘OŒi(ƒsƒ“ƒN)E”wŒi(•)EƒCƒ“ƒWƒP[ƒ^(ƒsƒ“ƒN)
-'ŒÄ‚Ño‚µŒ³@@@F‘OŒi(Ô)E”wŒi(•)EƒCƒ“ƒWƒP[ƒ^(Ô)
-'------------------------------------------------------------------------------
+'â– Publicå¤‰æ•°ã®æ‡¸å¿µç‚¹
+'çŠ¶æ…‹(State)ãŒã©ã“ã‹ã‚‰ã§ã‚‚æ›¸ãæ›ãˆå¯èƒ½ã«ãªã‚Šã€åŽŸå› è¿½è·¡ãŒé›£ã—ããªã‚‹
+'åˆæœŸåŒ–é †åº(Auto_Open / Workbook_Open ç­‰)ã‚„ã€ã‚¨ãƒ©ãƒ¼ä¸­æ–­ã§åŠç«¯ãªå€¤ãŒæ®‹ã‚‹
+'å°†æ¥ã®æ”¹ä¿®ã§ã„ã¤ã®é–“ã«ã‹ä¾å­˜ç®‡æ‰€ãŒå¢—ãˆã‚‹ï¼ˆã‚¹ãƒ‘ã‚²ãƒƒãƒ†ã‚£åŒ–ï¼‰
+'(ã‚¢ãƒ‰ã‚¤ãƒ³/å‚ç…§ã•ã‚Œã‚‹å½¢ã ã¨ï¼‰å¤–éƒ¨ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã‹ã‚‰è§¦ã‚Œã‚‹å¯èƒ½æ€§ãŒå‡ºã‚‹
 
-'¡Public•Ï”‚ÌŒœ”O“_
-'ó‘Ô(State)‚ª‚Ç‚±‚©‚ç‚Å‚à‘‚«Š·‚¦‰Â”\‚É‚È‚èAŒ´ˆö’ÇÕ‚ª“ï‚µ‚­‚È‚é
-'‰Šú‰»‡˜(Auto_Open / Workbook_Open “™)‚âAƒGƒ‰[’†’f‚Å”¼’[‚È’l‚ªŽc‚é
-'«—ˆ‚Ì‰üC‚Å‚¢‚Â‚ÌŠÔ‚É‚©ˆË‘¶‰ÓŠ‚ª‘‚¦‚éiƒXƒpƒQƒbƒeƒB‰»j
-'(ƒAƒhƒCƒ“/ŽQÆ‚³‚ê‚éŒ`‚¾‚ÆjŠO•”ƒvƒƒWƒFƒNƒg‚©‚çG‚ê‚é‰Â”\«‚ªo‚é
+'1) å®šæ•°ãƒ»åž‹ãƒ»åˆ—æŒ™ã¯ Public æŽ¨å¥¨
 
-'1) ’è”EŒ^E—ñ‹“‚Í Public „§
-
-'2) ‰Â•Ï‚Ì’l‚ÍuPrivate + Propertyv‚Åˆê–{‰» „§
+'2) å¯å¤‰ã®å€¤ã¯ã€ŒPrivate + Propertyã€ã§ä¸€æœ¬åŒ– æŽ¨å¥¨
 
 '------------------------------------------------------------------------------
 
-'¡Property
-'1. Ý’è’liConfigjFŠÂ‹«ˆË‘¶E‰^—p‚Å•Ï‚í‚è“¾‚é‚à‚Ì
-'2. ó‘ÔiStatej@  Fˆ—ƒ‚[ƒh‚âŽÀs’†ƒtƒ‰ƒO‚È‚ÇA‰ó‚ê‚é–ï‰î‚È‚à‚Ì
-'3. “üŒûiFacade)  @: ŠO•”‚©‚çG‚Á‚Ä‚¢‚¢‘‹Œû‚ð‚P‚Â‚Éi‚é
+'â– Property
+'1. è¨­å®šå€¤ï¼ˆConfigï¼‰ï¼šç’°å¢ƒä¾å­˜ãƒ»é‹ç”¨ã§å¤‰ã‚ã‚Šå¾—ã‚‹ã‚‚ã®
+'2. çŠ¶æ…‹ï¼ˆStateï¼‰ã€€  ï¼šå‡¦ç†ãƒ¢ãƒ¼ãƒ‰ã‚„å®Ÿè¡Œä¸­ãƒ•ãƒ©ã‚°ãªã©ã€å£Šã‚Œã‚‹åŽ„ä»‹ãªã‚‚ã®
+'3. å…¥å£ï¼ˆFacade)  ã€€: å¤–éƒ¨ã‹ã‚‰è§¦ã£ã¦ã„ã„çª“å£ã‚’ï¼‘ã¤ã«çµžã‚‹
 
-'Public ‰Â•Ï•Ï”‚ð‘å—Ê‚É’u‚­‘ã‚í‚è‚ÉAu“üŒû‚¾‚¯ Publicvu’†g‚ÍPrivatev‚ÉŠñ‚¹‚é
+'Public å¯å¤‰å¤‰æ•°ã‚’å¤§é‡ã«ç½®ãä»£ã‚ã‚Šã«ã€ã€Œå…¥å£ã ã‘ Publicã€ã€Œä¸­èº«ã¯Privateã€ã«å¯„ã›ã‚‹
 
 '------------------------------------------------------------------------------
 
-'¡Const (’è”)
-' E’P“Æ‚Ì•s•Ï’liˆÓ–¡‚ªƒuƒŒ‚È‚¢j
-'       (—á:ƒ^ƒCƒ€ƒAƒEƒg•bAŒÅ’èƒpƒX–¼AŒÅ’è•¶Žš—ñAƒV[ƒg–¼A—ñ”Ô†A³‹K•\Œ»ƒpƒ^[ƒ““™j
-' Eƒrƒbƒgƒtƒ‰ƒOi&H01 ‚È‚Çj‚ð‘g‚Ý‡‚í‚¹‚½‚¢ê‡
+'â– Const (å®šæ•°)
+' ãƒ»å˜ç‹¬ã®ä¸å¤‰å€¤ï¼ˆæ„å‘³ãŒãƒ–ãƒ¬ãªã„ï¼‰
+'       (ä¾‹:ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆç§’ã€å›ºå®šãƒ‘ã‚¹åã€å›ºå®šæ–‡å­—åˆ—ã€ã‚·ãƒ¼ãƒˆåã€åˆ—ç•ªå·ã€æ­£è¦è¡¨ç¾ãƒ‘ã‚¿ãƒ¼ãƒ³ç­‰ï¼‰
+' ãƒ»ãƒ“ãƒƒãƒˆãƒ•ãƒ©ã‚°ï¼ˆ&H01 ãªã©ï¼‰ã‚’çµ„ã¿åˆã‚ã›ãŸã„å ´åˆ
 
-'¡Enum (—ñ‹“)
-' E ”Ô†‚Ì‚ÝÝ’è‰Âi•¶Žš—ñ‚ðÝ’è‚·‚éê‡‚ÍDictionary‚ðŽg—pj
-' EuŽæ‚è‚¤‚é’l‚ÌW‡v‚ªŒˆ‚Ü‚Á‚Ä‚¢‚éó‘ÔEŽí•Ê
-' Eu”’l‚»‚Ì‚à‚Ìv‚æ‚è–¼‘O‚ÅˆÓ–¡‚ð“n‚µ‚½‚¢iˆø”E–ß‚è’l‚Å“Á‚ÉŒø‚­j
-' E‘I‘ðŽˆ‚ðŒ^i–¼‘Oj‚Æ‚µ‚ÄŒÅ’è‚·‚é
+'â– Enum (åˆ—æŒ™)
+' ãƒ» ç•ªå·ã®ã¿è¨­å®šå¯ï¼ˆæ–‡å­—åˆ—ã‚’è¨­å®šã™ã‚‹å ´åˆã¯Dictionaryã‚’ä½¿ç”¨ï¼‰
+' ãƒ»ã€Œå–ã‚Šã†ã‚‹å€¤ã®é›†åˆã€ãŒæ±ºã¾ã£ã¦ã„ã‚‹çŠ¶æ…‹ãƒ»ç¨®åˆ¥
+' ãƒ»ã€Œæ•°å€¤ãã®ã‚‚ã®ã€ã‚ˆã‚Šåå‰ã§æ„å‘³ã‚’æ¸¡ã—ãŸã„ï¼ˆå¼•æ•°ãƒ»æˆ»ã‚Šå€¤ã§ç‰¹ã«åŠ¹ãï¼‰
+' ãƒ»é¸æŠžè‚¢ã‚’åž‹ï¼ˆåå‰ï¼‰ã¨ã—ã¦å›ºå®šã™ã‚‹
 
         'Enum enmColumnsNo
         '  No = 1
@@ -58,15 +41,15 @@ Option Private Module
         'End Enum
         '
         'Sub Test()
-        '  Cells(5, enmColumnsNo.No).Value = "‚Piƒiƒ“ƒo[j"
-        '  Cells(5, enmColumnsNo.Name).Value = "‚Qi–¼‘Oj"
-        '  Cells(5, enmColumnsNo.GoodLang).Value = "‚Ri“¾ˆÓŒ¾Œêj"
+        '  Cells(5, enmColumnsNo.No).Value = "ï¼‘ï¼ˆãƒŠãƒ³ãƒãƒ¼ï¼‰"
+        '  Cells(5, enmColumnsNo.Name).Value = "ï¼’ï¼ˆåå‰ï¼‰"
+        '  Cells(5, enmColumnsNo.GoodLang).Value = "ï¼“ï¼ˆå¾—æ„è¨€èªžï¼‰"
         'End Sub
 
-'¡Type
-' E‚±‚ÌƒvƒƒWƒFƒNƒg‚É‚¨‚¯‚é "1Œ•ª‚Ìƒf[ƒ^‚ÌŒ`" ‚ð’è‹`‚·‚é‚½‚ß‚Ì“¹‹ï
-' E•¡”‚Ì•Ï”‚ð‚Ð‚Æ‚Ü‚Æ‚ß‚É‚µ‚ÄA‚P‚Â‚Ì "\‘¢‘Ì" ‚Æ‚µ‚Äˆµ‚¤‚½‚ß‚ÌŒ^’è‹`
-' EC‚Å‚¢‚¤ structA‘¼Œ¾Œê‚Å‚¢‚¤uƒŒƒR[ƒhŒ^v‚É‘Š“–
+'â– Type
+' ãƒ»ã“ã®ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã«ãŠã‘ã‚‹ "1ä»¶åˆ†ã®ãƒ‡ãƒ¼ã‚¿ã®å½¢" ã‚’å®šç¾©ã™ã‚‹ãŸã‚ã®é“å…·
+' ãƒ»è¤‡æ•°ã®å¤‰æ•°ã‚’ã²ã¨ã¾ã¨ã‚ã«ã—ã¦ã€ï¼‘ã¤ã® "æ§‹é€ ä½“" ã¨ã—ã¦æ‰±ã†ãŸã‚ã®åž‹å®šç¾©
+' ãƒ»Cã§ã„ã† structã€ä»–è¨€èªžã§ã„ã†ã€Œãƒ¬ã‚³ãƒ¼ãƒ‰åž‹ã€ã«ç›¸å½“
 
         'Public Type TUser
         '       Id As Long
@@ -76,70 +59,70 @@ Option Private Module
 
         'Dim u As TUser
         'u.Id = 1
-        'u.Name = "ŽR“c"
+        'u.Name = "å±±ç”°"
         'u.Age = 30
 
-' Eƒoƒ‰ƒoƒ‰‚Ì•Ï”‚ðAˆÓ–¡“I‚Éˆê‚Â‚Ì‚Ü‚Æ‚Ü‚è‚Æ‚µ‚Äˆµ‚¦‚é
-' Eu‚PƒŒƒR[ƒhv‚ð•\‚É‚µ‚½‚¢
-  'i—áFƒ†[ƒU[î•ñAÝ’è‚PŒ•ªACSV‚Ì‚PsADB‚Ì‚Psj
-    '@¨@uÝ’èv‚Æ‚¢‚¤ŠT”O‚ð1‚Â‚Ì•Ï”‚Åˆµ‚¦‚éB
+' ãƒ»ãƒãƒ©ãƒãƒ©ã®å¤‰æ•°ã‚’ã€æ„å‘³çš„ã«ä¸€ã¤ã®ã¾ã¨ã¾ã‚Šã¨ã—ã¦æ‰±ãˆã‚‹
+' ãƒ»ã€Œï¼‘ãƒ¬ã‚³ãƒ¼ãƒ‰ã€ã‚’è¡¨ã«ã—ãŸã„
+  'ï¼ˆä¾‹ï¼šãƒ¦ãƒ¼ã‚¶ãƒ¼æƒ…å ±ã€è¨­å®šï¼‘ä»¶åˆ†ã€CSVã®ï¼‘è¡Œã€DBã®ï¼‘è¡Œï¼‰
+    'ã€€â†’ã€€ã€Œè¨­å®šã€ã¨ã„ã†æ¦‚å¿µã‚’1ã¤ã®å¤‰æ•°ã§æ‰±ãˆã‚‹ã€‚
 
-' EŠÖ”‚Ìˆø”‚ª‘‚¦‚·‚¬‚½‚Æ‚«‚ÉŽg—p
-    ' ¨@ˆø”‚ÌˆÓ–¡‚ª•ö‚ê‚È‚¢A‡”Ôƒ~ƒX‚àÁ‚¦‚é
+' ãƒ»é–¢æ•°ã®å¼•æ•°ãŒå¢—ãˆã™ãŽãŸã¨ãã«ä½¿ç”¨
+    ' â†’ã€€å¼•æ•°ã®æ„å‘³ãŒå´©ã‚Œãªã„ã€é †ç•ªãƒŸã‚¹ã‚‚æ¶ˆãˆã‚‹
 
-' EuŠÖ˜A‚·‚é’l‚ÌW‡v‚ð•\‚µ‚½‚¢‚Æ‚«
-   ' ¨@”z—ñ‚âDictionary‚æ‚èŒ^ˆÀ‘S‚ÅŽ©ŒÈà–¾“IB
+' ãƒ»ã€Œé–¢é€£ã™ã‚‹å€¤ã®é›†åˆã€ã‚’è¡¨ã—ãŸã„ã¨ã
+   ' â†’ã€€é…åˆ—ã‚„Dictionaryã‚ˆã‚Šåž‹å®‰å…¨ã§è‡ªå·±èª¬æ˜Žçš„ã€‚
    
-' Type ‚Æ Class ‚Ìˆá‚¢
-'---------------- Type  ------b-------- Class --------
-'[«@@Ž¿] ‚½‚¾‚Ìƒf[ƒ^” @|@ƒf[ƒ^{ƒƒWƒbƒN
-'[ƒƒ\ƒbƒh] Ž‚Ä‚È‚¢@@@@|@Ž‚Ä‚é
-'[‰ Šú ‰» ] Ž©“®ƒ[ƒ‰Šú‰»@|@Initialize
-'[ŽQ@@Æ] ’l“n‚µ@@@@@|@ŽQÆ“n‚µ
-'[—p@@“r] \‘¢‘Ì@@@@@|@ƒIƒuƒWƒFƒNƒg
-'[”»’fŠî€] ƒf[ƒ^‚¾‚¯@@@|@U‚é•‘‚¢‚à•K—v
+' Type ã¨ Class ã®é•ã„
+'---------------- Type  ------ï½œ-------- Class --------
+'[æ€§ã€€ã€€è³ª] ãŸã ã®ãƒ‡ãƒ¼ã‚¿ç®±ã€€|ã€€ãƒ‡ãƒ¼ã‚¿ï¼‹ãƒ­ã‚¸ãƒƒã‚¯
+'[ãƒ¡ã‚½ãƒƒãƒ‰] æŒã¦ãªã„ã€€ã€€ã€€ã€€|ã€€æŒã¦ã‚‹
+'[åˆ æœŸ åŒ– ] è‡ªå‹•ã‚¼ãƒ­åˆæœŸåŒ–ã€€|ã€€Initialize
+'[å‚ã€€ã€€ç…§] å€¤æ¸¡ã—ã€€ã€€ã€€ã€€ã€€|ã€€å‚ç…§æ¸¡ã—
+'[ç”¨ã€€ã€€é€”] æ§‹é€ ä½“ã€€ã€€ã€€ã€€ã€€|ã€€ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+'[åˆ¤æ–­åŸºæº–] ãƒ‡ãƒ¼ã‚¿ã ã‘ã€€ã€€ã€€|ã€€æŒ¯ã‚‹èˆžã„ã‚‚å¿…è¦
 
-'Type ‚ðŽg‚í‚È‚¢‚Ù‚¤‚ª‚¢‚¢ê–Ê
-'E—v‘f‚ª•p”É‚É•Ï‚í‚é
-'EƒtƒB[ƒ‹ƒh‚ª“®“I
-'EƒƒWƒbƒN‚ðŽ‚½‚¹‚½‚¢
-'EŽ«‘\‘¢‚ª•K—v
+'Type ã‚’ä½¿ã‚ãªã„ã»ã†ãŒã„ã„å ´é¢
+'ãƒ»è¦ç´ ãŒé »ç¹ã«å¤‰ã‚ã‚‹
+'ãƒ»ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãŒå‹•çš„
+'ãƒ»ãƒ­ã‚¸ãƒƒã‚¯ã‚’æŒãŸã›ãŸã„
+'ãƒ»è¾žæ›¸æ§‹é€ ãŒå¿…è¦
 
-'¡ŒÅ’è’l‚Ìƒf[ƒ^ŠÇ—•û–@
-    '¥ƒV[ƒg‚É”z’u
-        'E‹Æ–±ƒ‹[ƒ‹‚âƒ}ƒXƒ^ƒf[ƒ^‚ÅAŒ»ê‚ª•Ï‚¦‚é‰Â”\«‚ª‚ ‚é‚à‚Ì
-        '@(—áF•”–åƒR[ƒh•\A¤•i‹æ•ªAƒƒbƒZ[ƒW•¶Œ¾Aè‡’lA’ •[Ý’èA•\Ž¦‡‚È‚Ç
-        'E‰^—pŽÒ‚ªVBA‚ðG‚ê‚È‚¢‘O’ñ‚ÅAƒf[ƒ^‚Æ‚µ‚ÄXV‚µ‚½‚¢‚à‚Ì
+'â– å›ºå®šå€¤ã®ãƒ‡ãƒ¼ã‚¿ç®¡ç†æ–¹æ³•
+    'â–¼ã‚·ãƒ¼ãƒˆã«é…ç½®
+        'ãƒ»æ¥­å‹™ãƒ«ãƒ¼ãƒ«ã‚„ãƒžã‚¹ã‚¿ãƒ‡ãƒ¼ã‚¿ã§ã€ç¾å ´ãŒå¤‰ãˆã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ã‚‚ã®
+        'ã€€(ä¾‹ï¼šéƒ¨é–€ã‚³ãƒ¼ãƒ‰è¡¨ã€å•†å“åŒºåˆ†ã€ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸æ–‡è¨€ã€é–¾å€¤ã€å¸³ç¥¨è¨­å®šã€è¡¨ç¤ºé †ãªã©
+        'ãƒ»é‹ç”¨è€…ãŒVBAã‚’è§¦ã‚Œãªã„å‰æã§ã€ãƒ‡ãƒ¼ã‚¿ã¨ã—ã¦æ›´æ–°ã—ãŸã„ã‚‚ã®
 
-    '¥ƒR[ƒh‚É”z’u
-        'E•Ï‚¦‚é‚Æ“®ì‚ª•Ï‚í‚é "Žd—l‚»‚Ì‚à‚Ì" ‚ÅAŽÀ‘•‚Ì®‡«‚ª•K—v‚È‚à‚Ì
-        '@i—áFˆ—ƒ‚[ƒhA“à•”ó‘ÔA•ªŠòƒL[AƒGƒ‰[Ží•ÊAAPI‚Ì–ß‚è’l•ª—Þ‚È‚Ç
-        'E•ÏX‚ª“ü‚é‚È‚ç•K‚¸ƒeƒXƒg‚âƒŒƒrƒ…[‚ª•K—v‚È‚à‚Ì
+    'â–¼ã‚³ãƒ¼ãƒ‰ã«é…ç½®
+        'ãƒ»å¤‰ãˆã‚‹ã¨å‹•ä½œãŒå¤‰ã‚ã‚‹ "ä»•æ§˜ãã®ã‚‚ã®" ã§ã€å®Ÿè£…ã®æ•´åˆæ€§ãŒå¿…è¦ãªã‚‚ã®
+        'ã€€ï¼ˆä¾‹ï¼šå‡¦ç†ãƒ¢ãƒ¼ãƒ‰ã€å†…éƒ¨çŠ¶æ…‹ã€åˆ†å²ã‚­ãƒ¼ã€ã‚¨ãƒ©ãƒ¼ç¨®åˆ¥ã€APIã®æˆ»ã‚Šå€¤åˆ†é¡žãªã©
+        'ãƒ»å¤‰æ›´ãŒå…¥ã‚‹ãªã‚‰å¿…ãšãƒ†ã‚¹ãƒˆã‚„ãƒ¬ãƒ“ãƒ¥ãƒ¼ãŒå¿…è¦ãªã‚‚ã®
 
 
-'¡Class
-'E "‚à‚Ì" ‚ð•\Œ»‚µ‚½‚¢‚Æ‚«iŽÀ‘Ì‚ª‚ ‚éj
-    'i—áFˆóŠÓA’ •[AƒWƒ‡ƒuAƒ†[ƒUAƒZƒbƒVƒ‡ƒ“j
-'Eó‘Ô{U‚é•‘‚¢‚ðƒZƒbƒg‚ÅŽ‚½‚¹‚½‚¢
-    '—áFSign()AValidate()ARender()
-'E“¯‚¶ƒƒWƒbƒN‚ð•¡”ƒCƒ“ƒXƒ^ƒ“ƒX‚ÅŽg‚¤
-    '—áF•¡”ƒtƒ@ƒCƒ‹A•¡”’ •[‚ð“¯Žžˆ—
-'EÓ–±‚ð•ª—£‚µ‚½‚¢iˆË‘¶ŠÖŒW‚ðØ‚è‚½‚¢j
-    'UI‘w/ƒƒWƒbƒN‘w/I/O‘w ‚È‚Ç
+'â– Class
+'ãƒ» "ã‚‚ã®" ã‚’è¡¨ç¾ã—ãŸã„ã¨ãï¼ˆå®Ÿä½“ãŒã‚ã‚‹ï¼‰
+    'ï¼ˆä¾‹ï¼šå°é‘‘ã€å¸³ç¥¨ã€ã‚¸ãƒ§ãƒ–ã€ãƒ¦ãƒ¼ã‚¶ã€ã‚»ãƒƒã‚·ãƒ§ãƒ³ï¼‰
+'ãƒ»çŠ¶æ…‹ï¼‹æŒ¯ã‚‹èˆžã„ã‚’ã‚»ãƒƒãƒˆã§æŒãŸã›ãŸã„
+    'ä¾‹ï¼šSign()ã€Validate()ã€Render()
+'ãƒ»åŒã˜ãƒ­ã‚¸ãƒƒã‚¯ã‚’è¤‡æ•°ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã§ä½¿ã†
+    'ä¾‹ï¼šè¤‡æ•°ãƒ•ã‚¡ã‚¤ãƒ«ã€è¤‡æ•°å¸³ç¥¨ã‚’åŒæ™‚å‡¦ç†
+'ãƒ»è²¬å‹™ã‚’åˆ†é›¢ã—ãŸã„ï¼ˆä¾å­˜é–¢ä¿‚ã‚’åˆ‡ã‚ŠãŸã„ï¼‰
+    'UIå±¤/ãƒ­ã‚¸ãƒƒã‚¯å±¤/I/Oå±¤ ãªã©
 
-'’PˆÊ•Ê•Ï”–¼
-'timeoutMs      :ƒ~ƒŠ•b
-'timeoutSec     :•b
-'intervalMin     :•ª
-'sizeKb            :ƒLƒƒoƒCƒg
-'sizeMb           :ƒƒKƒoƒCƒg
-'lengthPx        :ƒsƒNƒZƒ‹
-'angleDeg       :“x
-'angleRad       :ƒ‰ƒWƒAƒ“
+'å˜ä½åˆ¥å¤‰æ•°å
+'timeoutMs      :ãƒŸãƒªç§’
+'timeoutSec     :ç§’
+'intervalMin     :åˆ†
+'sizeKb            :ã‚­ãƒ­ãƒã‚¤ãƒˆ
+'sizeMb           :ãƒ¡ã‚¬ãƒã‚¤ãƒˆ
+'lengthPx        :ãƒ”ã‚¯ã‚»ãƒ«
+'angleDeg       :åº¦
+'angleRad       :ãƒ©ã‚¸ã‚¢ãƒ³
 
 '------------------------------------------------------------------------------
-'uC + Œ^–¼v= Œ^•ÏŠ·
-'ŠÖ”       •ÏŠ·æ
+'ã€ŒC + åž‹åã€= åž‹å¤‰æ›
+'é–¢æ•°       å¤‰æ›å…ˆ
 'CInt       Inreger
 'CLng      Long
 'CDbl      Double
@@ -151,7 +134,7 @@ Public Declare PtrSafe Function QueryPerformanceCounter Lib "kernel32" (ByRef lp
 Public Declare PtrSafe Function QueryPerformanceFrequency Lib "kernel32" (ByRef lpFrequency As LongLong) As Long
 
 '------------------------------------------------------------------------------
-'¡ŽQÆÝ’è
+'â– å‚ç…§è¨­å®š
 'Microsoft Scripting Runtime
 'Microsoft VBScript Regular Expressions X.X
 '------------------------------------------------------------------------------
@@ -172,55 +155,55 @@ Sub library()
 Path = "\\////"
 Set Fso = CreateObject("Scripting.FileSystemObject")
 If Fso.fileExists(Path) Then
-    Debug.Print "‘¶Ý‚µ‚Ü‚·B"
+    Debug.Print "å­˜åœ¨ã—ã¾ã™ã€‚"
 End If
 
 Set Fso = Nothing
 
 
 '------------------------------------------------------------------------------
-'¡ƒc[ƒ‹”z•zƒŠƒXƒN
-'EŽQÆÝ’è‚ÅŒ‡—Ž/ƒo[ƒWƒ‡ƒ“·
-'E32/64bit·
-'EOfficeƒo[ƒWƒ‡ƒ“·
-'E—˜—p‹ÖŽ~‚ÌCOMiƒZƒLƒ…ƒŠƒeƒBƒ|ƒŠƒV[j
+'â– ãƒ„ãƒ¼ãƒ«é…å¸ƒãƒªã‚¹ã‚¯
+'ãƒ»å‚ç…§è¨­å®šã§æ¬ è½/ãƒãƒ¼ã‚¸ãƒ§ãƒ³å·®
+'ãƒ»32/64bitå·®
+'ãƒ»Officeãƒãƒ¼ã‚¸ãƒ§ãƒ³å·®
+'ãƒ»åˆ©ç”¨ç¦æ­¢ã®COMï¼ˆã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£ãƒãƒªã‚·ãƒ¼ï¼‰
 
-'‘ÎôAFŽQÆÝ’è•s—v‚Ì”ÍˆÍ‚ÅŠ®Œ‹‚³‚¹‚é
-'EExcel•W€‹@”\i”z—ñEDictionary‚È‚µ‚Å‚à‘‚¯‚é”ÍˆÍj
-'EWorksheetFunctionACollection “™
+'å¯¾ç­–Aï¼šå‚ç…§è¨­å®šä¸è¦ã®ç¯„å›²ã§å®Œçµã•ã›ã‚‹
+'ãƒ»Excelæ¨™æº–æ©Ÿèƒ½ï¼ˆé…åˆ—ãƒ»Dictionaryãªã—ã§ã‚‚æ›¸ã‘ã‚‹ç¯„å›²ï¼‰
+'ãƒ»WorksheetFunctionã€Collection ç­‰
 
-'‘ÎôBFCreateObjecti’x‰„ƒoƒCƒ“ƒfƒBƒ“ƒOj‚Å‹zŽû‚·‚é
+'å¯¾ç­–Bï¼šCreateObjectï¼ˆé…å»¶ãƒã‚¤ãƒ³ãƒ‡ã‚£ãƒ³ã‚°ï¼‰ã§å¸åŽã™ã‚‹
 'Dictionary(Scripting)
 Set dict = CreateObject("Scripting.Dictionary")
 
-'‚‘¬‚ÈuƒL[¨’lvŒŸõ—p‚Ìƒf[ƒ^\‘¢
-'u‚±‚Ì’lA‚à‚¤o‚Ä‚«‚½Hv
-'uID‚©‚ç–¼‘Oˆø‚«‚½‚¢v
-'ud•¡ƒ`ƒFƒbƒN‚µ‚½‚¢v
-'Ed•¡íœ
-'Eƒ}ƒXƒ^ŽQÆ
-'EWŒv
-'EƒOƒ‹[ƒsƒ“ƒO
-'Eƒtƒ‰ƒOŠÇ—
+'é«˜é€Ÿãªã€Œã‚­ãƒ¼â†’å€¤ã€æ¤œç´¢ç”¨ã®ãƒ‡ãƒ¼ã‚¿æ§‹é€ 
+'ã€Œã“ã®å€¤ã€ã‚‚ã†å‡ºã¦ããŸï¼Ÿã€
+'ã€ŒIDã‹ã‚‰åå‰å¼•ããŸã„ã€
+'ã€Œé‡è¤‡ãƒã‚§ãƒƒã‚¯ã—ãŸã„ã€
+'ãƒ»é‡è¤‡å‰Šé™¤
+'ãƒ»ãƒžã‚¹ã‚¿å‚ç…§
+'ãƒ»é›†è¨ˆ
+'ãƒ»ã‚°ãƒ«ãƒ¼ãƒ”ãƒ³ã‚°
+'ãƒ»ãƒ•ãƒ©ã‚°ç®¡ç†
 
-dict("A001") = "ŽR“c"
-dict("A002") = "²“¡"
+dict("A001") = "å±±ç”°"
+dict("A002") = "ä½è—¤"
 If dict.Exists("A001") Then
     Debug.Print dict("A001")
 End If
 
-'Dictionary‚Í **0(1)ƒAƒNƒZƒXi‚Ù‚Ú’è”ŽžŠÔj**‚Ì‚½‚ß
-'‘å—Êƒf[ƒ^‚É‚È‚é‚Æ‘ÌŠ´‘¬“x‚ª•ÊŽŸŒ³
+'Dictionaryã¯ **0(1)ã‚¢ã‚¯ã‚»ã‚¹ï¼ˆã»ã¼å®šæ•°æ™‚é–“ï¼‰**ã®ãŸã‚
+'å¤§é‡ãƒ‡ãƒ¼ã‚¿ã«ãªã‚‹ã¨ä½“æ„Ÿé€Ÿåº¦ãŒåˆ¥æ¬¡å…ƒ
 
 
 'RegExp(VBScript)
 Set Re = CreateObject("VBScript.RegExp")
 
-'³‹K•\Œ»iƒpƒ^[ƒ“ƒ}ƒbƒ`j
-'Eu‚±‚Ì•¶Žš—ñAƒ[ƒ‹Œ`Ž®Hv
-'Eu”Žš‚¾‚¯”²‚«‚½‚¢v
-'Eu“Á’èƒtƒH[ƒ}ƒbƒg‚¾‚¯’Šov
-'10s‚Å100s•ª‚Ì•¶Žš—ñˆ—‚ðÁ‚¹‚éŒn‚Ì“¹‹ï
+'æ­£è¦è¡¨ç¾ï¼ˆãƒ‘ã‚¿ãƒ¼ãƒ³ãƒžãƒƒãƒï¼‰
+'ãƒ»ã€Œã“ã®æ–‡å­—åˆ—ã€ãƒ¡ãƒ¼ãƒ«å½¢å¼ï¼Ÿã€
+'ãƒ»ã€Œæ•°å­—ã ã‘æŠœããŸã„ã€
+'ãƒ»ã€Œç‰¹å®šãƒ•ã‚©ãƒ¼ãƒžãƒƒãƒˆã ã‘æŠ½å‡ºã€
+'10è¡Œã§100è¡Œåˆ†ã®æ–‡å­—åˆ—å‡¦ç†ã‚’æ¶ˆã›ã‚‹ç³»ã®é“å…·
 
 Re.pattern = "/d+"
 Re.Global = True
@@ -230,7 +213,7 @@ If Re.Test("ID=12345") Then
 End If
 
 '------------------------------------------------------------------------------
-'¡ƒIƒuƒWƒFƒNƒgÝ’è
+'â– ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆè¨­å®š
 Set wb = ThisWorkbook
 Set ws = ThisWorkbook.ActiveSheet
 
@@ -239,17 +222,17 @@ Set wb = Nothing
 
 
 '------------------------------------------------------------------------------
-'¡‹ó‚Ì”»’è
-'Null       :  DB—R—ˆ‚ÌŒ‡‘¹’l@        F@If IsNull(x) Then
-'Empty    :  –¢‰Šú‰»‚ÌVariant@    F@If IsEmpty(x) Then
-'Nothing  :  ƒIƒuƒWƒFƒNƒg‚Ì–¢¶¬@F@If x Is Nothing Then
-'ƒuƒ‰ƒ“ƒN  :  ""(‹ó•¶Žš)@@@@@@F@If x = "" Then
+'â– ç©ºã®åˆ¤å®š
+'Null       :  DBç”±æ¥ã®æ¬ æå€¤ã€€        ï¼šã€€If IsNull(x) Then
+'Empty    :  æœªåˆæœŸåŒ–ã®Variantã€€    ï¼šã€€If IsEmpty(x) Then
+'Nothing  :  ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æœªç”Ÿæˆã€€ï¼šã€€If x Is Nothing Then
+'ãƒ–ãƒ©ãƒ³ã‚¯  :  ""(ç©ºæ–‡å­—)ã€€ã€€ã€€ã€€ã€€ã€€ï¼šã€€If x = "" Then
 
-'Variant‚ªu‰½‚à“ü‚Á‚Ä‚È‚¢‚©Hv
+'VariantãŒã€Œä½•ã‚‚å…¥ã£ã¦ãªã„ã‹ï¼Ÿã€
 If IsNull(Tmp) Or IsEmpty(Tmp) Or Tmp = "" Then
 End If
 
-'RangeƒZƒ‹—p
+'Rangeã‚»ãƒ«ç”¨
 If IsNull(rng.Value) Or rng.Value = "" Then
 End If
 
@@ -257,25 +240,25 @@ If obj Is Nothing Then
 End If
 
 '------------------------------------------------------------------------------
-'¡’lƒ`ƒFƒbƒN
+'â– å€¤ãƒã‚§ãƒƒã‚¯
 Tmp = rng.Value
 
 If IsError(Tmp) Then
-    'ƒGƒ‰[
+    'ã‚¨ãƒ©ãƒ¼
 ElseIf IsEmpty(Tmp) Or Tmp = "" Then
-    '‹ó
+    'ç©º
 ElseIf IsDate(Tmp) Then
-    '“ú•t
+    'æ—¥ä»˜
 ElseIf IsNumeric(Tmp) Then
-    '”’l
+    'æ•°å€¤
 ElseIf VarType(Tmp) = vbString Then
-    '•¶Žš—ñ
+    'æ–‡å­—åˆ—
 End If
 
 
 '------------------------------------------------------------------------------
-'¡•¶Žš—ñ‘€ì
-'ŠÖ”–¼‚ÌŒã‚ë‚Éuv‚ð•t‚¯‚é‚ÆStringŒ^‚ð•Ô‚µŒ^”»’è‚Ìˆ—‚ª•s—v‚Æ‚È‚é
+'â– æ–‡å­—åˆ—æ“ä½œ
+'é–¢æ•°åã®å¾Œã‚ã«ã€Œï¼„ã€ã‚’ä»˜ã‘ã‚‹ã¨Stringåž‹ã‚’è¿”ã—åž‹åˆ¤å®šã®å‡¦ç†ãŒä¸è¦ã¨ãªã‚‹
 
 str = Replace$("test", "t", "")
 str = Left$("090-1234-5678", 3)
@@ -288,22 +271,22 @@ End Sub
 Sub library2()
 
 '------------------------------------------------------------------------------
-'¡ŒÄ‚Ño‚µ’l‚Ìˆ—‘¬“x
-'u’l“n‚µiByValjv ‚Ì LongŒ^‚ªÅ‘¬
-'¦uŽQÆ“n‚µiByRefjv‚ÌStringŒ^‚ªÅ‚à’x‚¢
+'â– å‘¼ã³å‡ºã—å€¤ã®å‡¦ç†é€Ÿåº¦
+'ã€Œå€¤æ¸¡ã—ï¼ˆByValï¼‰ã€ ã® Longåž‹ãŒæœ€é€Ÿ
+'â€»ã€Œå‚ç…§æ¸¡ã—ï¼ˆByRefï¼‰ã€ã®Stringåž‹ãŒæœ€ã‚‚é…ã„
 
 '------------------------------------------------------------------------------
-'¡ƒCƒ~ƒfƒBƒGƒCƒgƒEƒBƒ“ƒhƒE
+'â– ã‚¤ãƒŸãƒ‡ã‚£ã‚¨ã‚¤ãƒˆã‚¦ã‚£ãƒ³ãƒ‰ã‚¦
 Debug.Print tStart
 
 '------------------------------------------------------------------------------
-'¡ƒGƒ‰[ˆ—
-On Error Resume Next        'ƒGƒ‰[”­¶Œã‚àŽŸ‚Ìˆ—‚ðŽÀs
-On Error GoTo 0                 'ƒGƒ‰[ƒŠƒZƒbƒg
+'â– ã‚¨ãƒ©ãƒ¼å‡¦ç†
+On Error Resume Next        'ã‚¨ãƒ©ãƒ¼ç™ºç”Ÿå¾Œã‚‚æ¬¡ã®å‡¦ç†ã‚’å®Ÿè¡Œ
+On Error GoTo 0                 'ã‚¨ãƒ©ãƒ¼ãƒªã‚»ãƒƒãƒˆ
 
 
 '------------------------------------------------------------------------------
-'¡ExcelŠÖ”Žg—p
+'â– Excelé–¢æ•°ä½¿ç”¨
 buf1 = Application.WorksheetFunction.VLookup(searchData, _
                                                 Range("B1:C2000"), 2, False)    'VLookup
     
@@ -320,3 +303,4 @@ buf1 = Application.WorksheetFunction.VLookup(searchData, _
 
 
 End Sub
+
